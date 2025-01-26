@@ -14,7 +14,7 @@ mongoose.connect('mongodb://localhost:27017/insurance-system', {
 
 
 // UserBooks routes
-app.use(userBookRoutes);
+app.use('/userBook',userBookRoutes);
 
 const port = 3001;
 app.listen(port, () => {
