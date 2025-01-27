@@ -1,26 +1,13 @@
 const express = require('express');
-const categoryController = require('../controllers/categoryController');
 const router = express.Router();
+const categoryControllers = require("../controllers/categoryController");
 
-//create
-router.post('/', categoryController.createcategory);
-
-//update
-router.put('/:id', categoryController.updatecategory);
-
-//get all
-router.get('/', categoryController.getcategorys);
-
-//get one
-router.get('/:id', categoryController.getcategory);
-
-//delete
-router.delete('/:id', categoryController.deletecategory);
-
-//search by name
-router.get('/search', categoryController.searchcategories);
-
-//get with pagination
-router.get('/pagination', categoryController.getCategoriesWithPagination);
+router.get("/", categoryControllers.getAll);
+router.get("/paginated", categoryControllers.getAllWithPagination);
+router.get("/:id", categoryControllers.getOne);
+router.post("/", categoryControllers.createOne);
+router.put("/:id", categoryControllers.updateOne);
+router.delete("/:id", categoryControllers.deleteOne);
+router.get("/search", categoryControllers.searchCategories);
 
 module.exports = router;
