@@ -4,14 +4,14 @@ const Schema = mongoose.Schema;
 const authorsSchema = new Schema({
     name: {
       type: String,
-      // required: [true, "Please enter a name"],
+      required: [true, "Please enter a name"],
     },
     DOB: {
       type: Date,
     },
     about: {
       type: String,
-      // required: [true, "Please enter some information about you"],
+      required: [true, "Please enter some information about you"],
     },
     img: {
       type: String,

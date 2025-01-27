@@ -18,7 +18,7 @@ exports.createAuthor = async (req, res) => {
 
   exports.getAuthors = async (req, res) => {
     try {
-      const authors = await Author.find()//.populate("books");
+      const authors = await Author.find().populate("books");
       res.status(200).send(authors);
     } catch (error) {
       res.status(500).send(error);
@@ -27,7 +27,7 @@ exports.createAuthor = async (req, res) => {
 
   exports.getAuthor = async (req, res) => {
     try {
-      const author = await Author.findById(req.params.id)//.populate("books");
+      const author = await Author.findById(req.params.id).populate("books");
       if (!author) {
         return res.status(404).send();
       }
