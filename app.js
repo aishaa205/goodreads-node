@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bookRoutes = require("./Routes/bookRoutes");
-const authorRoutes = require("./Routes/authorRoutes");
+const bookRoutes = require("./routes/bookRoutes");
+const authorRoutes = require("./routes/authorRoutes");
 
 // const bookRoutes = require("./routes/bookRoutes");
 // const authorRoutes = require("./routes/authorRoutes");
