@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/insurance-system', {
+mongoose.connect('mongodb+srv://enghusseinsaad1:cCxlORhhU68ziVmn@cluster0.6auvi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
   
 }).then(() => console.log('Connected to MongoDB'))
   .catch(error => console.error('Could not connect to MongoDB', error));

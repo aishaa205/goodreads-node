@@ -5,12 +5,14 @@ const userBook = require('../models/userBook');
 
 exports.createUserBook = async (req, res) => {
   try {
-    const userBook = new userBook(req.body);
-    await userBook.save();
+    const newUserBook = new userBook(req.body);
+    await newUserBook.save();
 
-    res.status(201).send(userBook);
+
+    res.status(201).send(newUserBook);
   } catch (error) {
-    res.status(400).send(error);
+    console.log(error)
+    res.status(400).send('error');
   }
 };
 
@@ -21,6 +23,7 @@ exports.getUserBooks = async (req, res) => {
     const userBooks = await userBook.find().populate('user').populate('book');
     res.status(200).send(userBooks);
   } catch (error) {
+    console.log(error)
     res.status(500).send(error);
   }
 };
