@@ -1,4 +1,4 @@
-const Author = require("../models/authors");
+const Author = require("../models/author");
 
 
 

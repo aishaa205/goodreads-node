@@ -20,7 +20,7 @@ const authorsSchema = new Schema(
     books: [
       {
         type: Schema.Types.ObjectId,
-        ref: "book",
+        ref: "Book",
       },
     ],
     views: {
