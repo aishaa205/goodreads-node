@@ -1,26 +1,35 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
-const authorsSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Please enter a name"],
-  },
-  DOB: {
-    type: Date,
-  },
-  about: {
-    type: String,
-    required: [true, "Please enter some information about you"],
-  },
-  img: {
-    type: String,
-  },
-  books: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "book",
+const booksSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "Please enter a Title"],
     },
-  ],
-});
-module.exports = mongoose.model("Author", authorsSchema);
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: "category",
+      required: [true, "Please enter a Category"],
+    },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "auhtor",
+      required: [true, "Please enter an Auhtor"],
+    },
+    description: {
+      type: String,
+      required: [true, "Please enter a Description"],
+    },
+    img: {
+      type: String,
+    },
+    views: {
+      type: Number,
+      default: 0, // Starts at 0 when a new document is created
+      min: 0, // Ensures views cannot be negative
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Book", booksSchema);
