@@ -4,6 +4,7 @@ const cors = require('cors');
 const categoryRoutes = require('./routes/categoryRoutes');  
 const bookRoutes = require("./routes/bookRoutes");
 const authorRoutes = require("./routes/authorRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,10 @@ mongoose.connect('mongodb+srv://enghusseinsaad1:cCxlORhhU68ziVmn@cluster0.6auvi.
   .catch(error => console.error('Could not connect to MongoDB', error));
 app.use('/categories', categoryRoutes);
 
+    
+  app.use("/books",bookRoutes);
+  app.use("/authors", authorRoutes);
+  // app.use("/users", userRoutes);
 app.use("/books",bookRoutes);
 app.use("/authors", authorRoutes);
 
