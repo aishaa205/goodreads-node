@@ -23,6 +23,27 @@ const booksSchema = new Schema(
     img: {
       type: String,
     },
+    url: {
+      type: String,
+      validate: {
+        validator: function (value) {
+          return /^(http|https):\/\/[^ "]+$/.test(value);
+        },
+        message: "Invalid book URL format.",
+      },
+    },
+    totalRate: {
+      type: Number,
+      default: 0,
+    },
+    totalRateCount: {
+      type: Number,
+      default: 0,
+    },
+    edition: {
+      type: Number,
+      required: [true, "Please enter an Edition"],
+    },
     views: {
       type: Number,
       default: 0, // Starts at 0 when a new document is created

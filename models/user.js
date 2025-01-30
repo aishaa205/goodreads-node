@@ -46,6 +46,29 @@ const userSchema = new Schema(
       default: "user", // Default value if not specified
       required: [true, "Please specify a role"],
     },
+    favoriteCategories: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "category",
+      },
+    ],
+    subscription: {
+      subscriptionType: {
+        type: String,
+        enum: ["free", "monthly", "annual"],
+        default: "free",
+        required: function () {
+          return this.role === "user"; // Required only for users
+        },
+        startDate: {
+          type: Date,
+          default: Date.now,
+        },
+        endDate: {
+          type: Date,
+        },
+      },
+    },
   },
   { timestamps: true } //add timestamp for each document,
 );
