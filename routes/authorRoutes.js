@@ -1,13 +1,27 @@
 const express = require("express");
 const authorController = require("../controllers/authorController");
 const router = express.Router();
+const authorizeToken = require("../middleware/authorize");
+const authenticateToken = require("../middleware/authenticate");
 
-
-
-router.post("/", authorController.createAuthor);  
-router.get("/", authorController.getAuthors);
-router.get("/:id", authorController.getAuthor);  
-router.put("/:id", authorController.updateAuthor); 
-router.delete("/:id", authorController.deleteAuthor); 
+router.post(
+  "/",
+  authenticateToken,
+  authorizeToken,
+  authorController.createAuthor
+);
+router.get("/", authenticateToken, authorController.getAuthors);
+router.get(
+  "/:id",
+  authenticateToken,
+  authorizeToken,
+  authorController.updateAuthor
+);
+router.delete(
+  "/:id",
+  authenticateToken,
+  authorizeToken,
+  authorController.deleteAuthor
+);
 
 module.exports = router;

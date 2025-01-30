@@ -5,21 +5,14 @@ const { generateToken, verifyToken } = require("../utils/authToken");
 exports.registerUser = async (req, res) => {
   try {
     const saltRounds = 10; //how many times the hashing algorithm runs
-    const { fName, lName, username, email, password } = req.body;
+    req.body.role = "user";
     //check if existing email
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: req.body.email }); 
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const newUser = new User({
-      fName,
-      lName,
-      username,
-      email,
-      password: hashedPassword,
-      role: "user",
-    });
+    const newUser = new User(req.body);
     const savedUser = await newUser.save();
     res.status(201).json({ message: "User created", user: savedUser });
   } catch (error) {
