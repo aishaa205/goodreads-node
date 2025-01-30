@@ -23,23 +23,5 @@ const authenticate = async (req, res, next) => {
 
 
   module.exports = { authenticate };
+//ACCESS_TOKEN_SECRET matense4 t7oteha f el .env
 
-// const jwt = require("jsonwebtoken");
-
-// const authMiddleware = (req, res, next) => {
-//     const token = req.header("Authorization");
-
-//     if (!token) {
-//         return res.status(401).json({ message: "Access denied. No token provided." });
-//     }
-
-//     try {
-//         const verified = jwt.verify(token.replace("Bearer ", ""), process.env.ACCESS_TOKEN_SECRET);
-//         req.user = verified;
-//         next();
-//     } catch (error) {
-//         res.status(400).json({ message: "Invalid token." });
-//     }
-// };
-
-// module.exports = authMiddleware;

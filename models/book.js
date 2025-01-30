@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
 const booksSchema = new Schema({
   title: {
     type: String,
@@ -10,9 +11,9 @@ const booksSchema = new Schema({
     ref: "category",
     required: [true, "Please enter a Category"],
   },
-  auhtor: {
+  author: {
     type: Schema.Types.ObjectId,
-    ref: "auhtor",
+    ref: "autor",
     required: [true, "Please enter an Auhtor"],
   },
   description: {
@@ -21,9 +22,6 @@ const booksSchema = new Schema({
   },
   img: {
     type: String,
-  },
-  created_at: {
-    type: Date,
   },
   url: {
     type: String, 
@@ -42,8 +40,12 @@ const booksSchema = new Schema({
     type: Number,
     default: 0, 
   },
-  
-},
+  views: {
+      type: Number,
+      default: 0, // Starts at 0 when a new document is created
+      min: 0, // Ensures views cannot be negative
+    },
+  },
 { timestamps: true }
 );
 
