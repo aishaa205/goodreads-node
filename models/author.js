@@ -27,8 +27,8 @@ const authorsSchema = new Schema(
       type: Number,
       default: 0, // Starts at 0 when a new document is created
       min: 0, // Ensures views cannot be negative
-    }
+    },
   },
-  { timestamps: true }//
+  { timestamps: true } //
 );
-module.exports = mongoose.model("Author",authorsSchema) ;
+module.exports = mongoose.model("Author", authorsSchema);
