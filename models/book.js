@@ -25,6 +25,26 @@ const booksSchema = new Schema({
   created_at: {
     type: Date,
   },
-});
+  url: {
+    type: String, 
+    validate: {
+      validator: function (value) {
+        return /^(http|https):\/\/[^ "]+$/.test(value);
+      },
+      message: "Invalid book URL format.",
+    },
+  },
+  totalRate: {
+    type: Number,
+    default: 0, 
+  },
+  totalRateCount: {
+    type: Number,
+    default: 0, 
+  },
+  
+},
+{ timestamps: true }
+);
 
-module.exports = mongoose.model("Books",booksSchema);
+module.exports = mongoose.model("Book",booksSchema);
