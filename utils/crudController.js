@@ -58,22 +58,34 @@ const sendResponse = (res, status, data = null, validationMessage = null) => {
         const item = await Model.create(req.body);
         sendResponse(res, 201, item, "Item created successfully.");
       } catch (error) {
-        sendResponse(res, 400, null, "Failed to create item.");
+        if (error.name === "ValidationError") {
+          const messages = Object.values(error.errors).map((err) => err.message);
+          sendResponse(res, 400, null, messages);
+        } else {
+          sendResponse(res, 500, null, "Failed to create item.");
+        }
       }
     },
   
-    // Update an item
+    // Update an item with validation handling
     updateOne: async (req, res) => {
       try {
         const item = await Model.findByIdAndUpdate(req.params.id, req.body, {
           new: true,
+          runValidators: true, // Ensures schema validations run on updates
         });
+  
         if (!item) {
           return sendResponse(res, 404, null, "Item not found.");
         }
         sendResponse(res, 200, item, "Item updated successfully.");
       } catch (error) {
-        sendResponse(res, 400, null, "Failed to update item.");
+        if (error.name === "ValidationError") {
+          const messages = Object.values(error.errors).map((err) => err.message);
+          sendResponse(res, 400, null, messages);
+        } else {
+          sendResponse(res, 500, null, "Failed to update item.");
+        }
       }
     },
   

@@ -4,18 +4,25 @@ const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
-      unique: true,
+      required: [true, "Category name is required."],
+      minlength: [3, "Category name must be at least 3 characters long."],
+      maxlength: [50, "Category name must not exceed 50 characters."],
       trim: true,
-      minLength: 2,
+      unique: [true, "Category name already exists"] // Ensures unique category names
     },
     description: {
       type: String,
-      required: true,
+      maxlength: [200, "Description must not exceed 200 characters."],
     },
     image: {
       type: String,
       required: true,
+      validate: {
+        validator: (value) => {
+          return value.startsWith("http://") || value.startsWith("https://");
+        },
+        message: "Invalid image URL format.",
+      },
     },
     views: {
       type: Number,
