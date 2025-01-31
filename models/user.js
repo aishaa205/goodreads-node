@@ -55,20 +55,35 @@ const userSchema = new Schema(
     subscription: {
       subscriptionType: {
         type: String,
-        enum: ["free", "monthly", "annual"],
+        enum: ["free", "monthly", "annualy"],
         default: "free",
         required: function () {
           return this.role === "user"; // Required only for users
         },
-        startDate: {
-          type: Date,
-          default: Date.now,
+      },
+      startDate: {
+        type: Date,
+        default: Date.now,
+      },
+      endDate: {
+        type: Date,
+        default: function () {
+          return new Date(
+            Date.now() + 365 * 60 * 24 * 60 * 60 * 1000
+          ); /* 60 years from now */
         },
-        endDate: {
-          type: Date,
+        required: function () {
+          return (
+            this.role === "user" &&
+            (this.subscription.subscriptionType === "monthly" ||
+              this.subscription.subscriptionType === "annualy")
+          ); // Required only for users
         },
       },
     },
+    emailVerified: { type: Boolean, default: false },
+    otp: { type: String }, //for email verification
+    otpExpiration: { type: Date }, // OTP expiration time
   },
   { timestamps: true } //add timestamp for each document,
 );

@@ -9,15 +9,16 @@ const createAdminUser = async () => {
     } else {
       const newUser = new User({
         fName: "Admin",
-        lName:"Admin",
-        username:"Admin",
+        lName: "Admin",
+        username: "Admin",
         email: "admin@example.com",
         role: "admin",
         password: await bcrypt.hash("password-admin", 10),
+        emailVerified: true,
       });
 
       await newUser.save();
-      console.log("Admin account created successfully")
+      console.log("Admin account created successfully");
     }
   } catch (error) {
     console.error(error.message);
