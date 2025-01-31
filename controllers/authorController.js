@@ -17,7 +17,15 @@ exports.createAuthor = async (req, res) => {
 
 exports.getAuthors = async (req, res) => {
   try {
-    const authors = await Author.find().populate("books");
+    const authors = await Author.find();
+    res.status(200).send(authors);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+exports.getAuthorsNames = async (req, res) => {
+  try {
+    const authors = await Author.find({}, { _id: 1, name: 1 });
     res.status(200).send(authors);
   } catch (error) {
     res.status(500).send(error);

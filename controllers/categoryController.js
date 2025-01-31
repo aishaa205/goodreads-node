@@ -7,7 +7,7 @@ const categoryController = {
   // Get all category names and their IDs
   getAllNames: async (req, res) => {
     try {
-      const result = await Model.find().select('name _id');
+      const result = await Model.find({}, { _id: 1, name: 1 });
       if (!result) {
         return sendResponse(res, 404, null, "No items found.");
       }

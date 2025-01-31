@@ -11,6 +11,7 @@ router.post(
   authorController.createAuthor
 );
 router.get("/", authenticateToken, authorController.getAuthors);
+router.get("/names", authenticateToken, authorController.getAuthorsNames);
 router.get(
   "/:id",
   authenticateToken,

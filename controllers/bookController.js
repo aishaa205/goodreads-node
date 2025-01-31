@@ -18,7 +18,7 @@ exports.createBook = async (req, res) => {
 
   exports.getBooks = async (req, res) => {
     try {
-      const books = await Book.find().populate("category").populate("auhtor");
+      const books = await Book.find().populate('category', 'name').populate('author', 'name');
       res.status(200).send(books);
     } catch (error) {
       res.status(500).send(error);
@@ -28,7 +28,7 @@ exports.createBook = async (req, res) => {
 
   exports.getBook = async (req, res) => {
     try {
-      const book = await Book.findById(req.params.id).populate("category").populate("auhtor");
+      const book = await Book.findById(req.params.id);
       if (!book) {
         return res.status(404).send();
       }

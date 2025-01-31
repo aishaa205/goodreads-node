@@ -12,7 +12,6 @@ router.get("/filter", authenticateToken, bookController.getBooksfilter);
 router.get("/:id", authenticateToken, bookController.getBook);
 router.put(
   "/:id",
-
   authenticateToken,
   authorizeToken,
   bookController.updateBook
