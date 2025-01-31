@@ -12,6 +12,7 @@ const categorySchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      trim: true,
       maxlength: [200, "Description must not exceed 200 characters."],
     },
     image: {
@@ -19,7 +20,7 @@ const categorySchema = new mongoose.Schema(
       required: true,
       validate: {
         validator: (value) => {
-          return value.startsWith("http://") || value.startsWith("https://");
+          return value.startsWith("http://") || value.startsWith("https://") ; 
         },
         message: "Invalid image URL format.",
       },

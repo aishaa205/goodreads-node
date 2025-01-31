@@ -1,36 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const categoryControllers = require("../controllers/categoryController");
+const categoryController = require("../controllers/categoryController");
 const authorizeToken = require("../middleware/authorize");
 const authenticateToken = require("../middleware/authenticate");
 
-router.get("/", authenticateToken, categoryControllers.getAll);
-router.get(
-  "/paginated",
-  authenticateToken,
-  categoryControllers.getAllWithPagination
-);
-router.get("/:id", authenticateToken, categoryControllers.getOne);
-router.post(
-  "/",
-
-  authenticateToken,
-  authorizeToken,
-  categoryControllers.createOne
-);
-router.put(
-  "/:id",
-
-  authenticateToken,
-  authorizeToken,
-  categoryControllers.updateOne
-);
-router.delete(
-  "/:id",
-  authenticateToken,
-  authorizeToken,
-  categoryControllers.deleteOne
-);
-router.get("/search", authenticateToken, categoryControllers.searchCategories);
+router.get("/", authenticateToken, categoryController.getAllNames);
+router.get("/paginated",authenticateToken,categoryController.getAllWithPagination);
+router.get("/:id", authenticateToken, categoryController.getOne);
+router.post("/",authenticateToken,authorizeToken,categoryController.createOne);
+router.put("/:id",authenticateToken,authorizeToken,categoryController.updateOne);
+router.delete("/:id",authenticateToken,authorizeToken,categoryController.deleteOne);
+router.get("/search", authenticateToken, categoryController.search);
 
 module.exports = router;

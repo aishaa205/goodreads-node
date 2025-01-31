@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,10 +7,11 @@ const bookRoutes = require("./routes/bookRoutes");
 const authorRoutes = require("./routes/authorRoutes");
 // const userRoutes = require("./routes/userRoutes");
 const userBookRoutes = require("./routes/userBookRoutes");
+const bookReviews = require("./routes/bookReviewRoutes");
 const routes = require("./routes");
 const app = express();
 const path = require("path");
-require("dotenv").config();
+
 const { createAdminUser } = require("./scripts/setup");
 const db_link = process.env.MONGO_CONNECTION_STRING;
 mongoose
@@ -23,13 +25,11 @@ mongoose
 app.use(express.static(path.join(__dirname, "views")));
 app.use(cors());
 app.use(express.json());
-
 app.use("/categories", categoryRoutes);
-
 app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
+app.use("/bookReviews", bookReviews);
 // app.use("/users", userRoutes);
-
 app.use(routes);
 
 // UserBooks routes
