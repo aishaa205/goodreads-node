@@ -13,7 +13,7 @@ const booksSchema = new Schema(
     },
     author: {
       type: Schema.Types.ObjectId,
-      ref: "auhtor",
+      ref: "author",
       required: [true, "Please enter an Auhtor"],
     },
     description: {

@@ -8,9 +8,17 @@ const authorRoutes = require("./routes/authorRoutes");
 const userBookRoutes = require("./routes/userBookRoutes");
 const routes = require("./routes");
 const app = express();
+
 const path = require("path");
 require("dotenv").config();
 const { createAdminUser } = require("./scripts/setup");
+
+
+////////
+app.use(express.json()); // Allows JSON data in requests
+app.use(express.urlencoded({ extended: true })); 
+
+
 const db_link = process.env.MONGO_CONNECTION_STRING;
 mongoose
   .connect(db_link)
@@ -33,7 +41,7 @@ mongoose
   .catch((error) => console.error("Could not connect to MongoDB", error));
 app.use("/categories", categoryRoutes);
 
-app.use("/books", bookRoutes);
+// app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
 // app.use("/users", userRoutes);
 app.use("/books", bookRoutes);
