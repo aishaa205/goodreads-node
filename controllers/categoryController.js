@@ -1,18 +1,9 @@
 const Category = require("../models/category");
-const sendResponse = (res, status, data = null, validationMessage = null) => {
-  res.status(status).json({
-    status: status === 200 || status === 201 ? "success" : "error",
-    data,
-    validationMessage,
-  });
-};
+const sendResponse = require('../utils/responseUtil');
+
 
 const Model = Category;
-
 const categoryController = {
-
-
-
   // Get all category names and their IDs
   getAllNames: async (req, res) => {
     try {

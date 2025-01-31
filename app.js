@@ -8,6 +8,7 @@ const authorRoutes = require("./routes/authorRoutes");
 // const userRoutes = require("./routes/userRoutes");
 const userBookRoutes = require("./routes/userBookRoutes");
 const bookReviews = require("./routes/bookReviewRoutes");
+const userCategoryRoutes = require("./routes/userCategoryRoutes");
 const routes = require("./routes");
 const app = express();
 const path = require("path");
@@ -29,6 +30,7 @@ app.use("/categories", categoryRoutes);
 app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
 app.use("/bookReviews", bookReviews);
+app.use("/usercategories", userCategoryRoutes); //
 // app.use("/users", userRoutes);
 app.use(routes);
 
