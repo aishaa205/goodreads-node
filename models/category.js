@@ -15,16 +15,6 @@ const categorySchema = new mongoose.Schema(
       trim: true,
       maxlength: [200, "Description must not exceed 200 characters."],
     },
-    image: {
-      type: String,
-      required: true,
-      validate: {
-        validator: (value) => {
-          return value.startsWith("http://") || value.startsWith("https://") ; 
-        },
-        message: "Invalid image URL format.",
-      },
-    },
     views: {
       type: Number,
       default: 0, // Starts at 0 when a new document is created

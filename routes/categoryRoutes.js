@@ -10,6 +10,5 @@ router.get("/:id", authenticateToken, categoryController.getOne);
 router.post("/",authenticateToken,authorizeToken,categoryController.createOne);
 router.put("/:id",authenticateToken,authorizeToken,categoryController.updateOne);
 router.delete("/:id",authenticateToken,authorizeToken,categoryController.deleteOne);
-router.get("/search", authenticateToken, categoryController.search);
 
 module.exports = router;
