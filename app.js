@@ -14,6 +14,10 @@ const routes = require("./routes");
 const app = express();
 const path = require("path");
 
+
+
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
 const { createAdminUser } = require("./scripts/setup");
 const db_link = process.env.MONGO_CONNECTION_STRING;
 mongoose

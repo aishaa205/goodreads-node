@@ -41,6 +41,8 @@ exports.createBook = async (req, res) => {
 
   exports.updateBook = async (req, res) => {
     try {
+      const image = req.body.img;
+      req.body.img = null;
       const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!book) {
         return res.status(404).send();
