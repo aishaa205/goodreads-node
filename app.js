@@ -14,6 +14,10 @@ const routes = require("./routes");
 const app = express();
 const path = require("path");
 
+const passport = require("passport");
+require("./config/passport");
+const authRoutes = require("./routes/auth");
+
 const { createAdminUser } = require("./scripts/setup");
 const db_link = process.env.MONGO_CONNECTION_STRING;
 mongoose
@@ -24,6 +28,7 @@ mongoose
   })
   .catch((error) => console.error("Could not connect to MongoDB", error));
 // Middleware to serve static files from the "views/images" folder
+
 app.use(express.static(path.join(__dirname, "views")));
 app.use(cors());
 app.use(express.json());
@@ -34,6 +39,8 @@ app.use("/bookReviews", bookReviews);
 app.use("/usercategories", userCategoryRoutes);
 app.use("/siteContent", siteContentRoutes);
 // app.use("/users", userRoutes);
+app.use(passport.initialize());
+app.use("/auth", authRoutes);
 app.use(routes);
 
 // UserBooks routes

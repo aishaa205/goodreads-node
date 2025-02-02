@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
-const { secretKey } = require("../config/jwt");
-
+const secretKey = process.env.SECRET_KEY;
+const expiresIn = "3h";
 const generateToken = (user) => {
   const payload = {
     id: user._id,
@@ -12,7 +12,9 @@ const generateToken = (user) => {
     img: user.img,
     role: user.role,
   };
-  return jwt.sign(payload, secretKey, { expiresIn: "1h" }); //return Token that contains userData.
+
+
+  return jwt.sign(payload, secretKey, { expiresIn: expiresIn }); //return Token that contains userData.
 };
 
 //refreshes token for 6hrs,
@@ -26,7 +28,7 @@ const refreshToken = (user) => {
     img: user.img,
     role: user.role,
   };
-  return jwt.sign(payload, secretKey, { expiresIn: "6h" }); //return Token that contains userData.
+  return jwt.sign(payload, secretKey, { expiresIn: expiresIn }); //return Token that contains userData.
 };
 
 const verifyToken=(token)=>{
