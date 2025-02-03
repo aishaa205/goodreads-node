@@ -16,7 +16,7 @@ exports.addImgurImage = async (imageUrl) => {
     );
 
     console.log("Imgur URL:", response.data.data.link);
-    return response.data.data.link;
+    return response.data.data.link//.replace("imgur", "i.imgur");
   } catch (error) {
     console.log(error);
     return error;

@@ -1,21 +1,25 @@
 const Author = require("../models/author");
 const Book = require("../models/book");
+const { addImgurImage } = require("../utils/imgurImage");
 const sendResponse = require("../utils/responseUtil");
 
 exports.createAuthor = async (req, res) => {
   try {
-    const author = new Author(req.body);
     const existingAuthor = await Author.findOne({ name: req.body.name });
     if (existingAuthor) {
       return res.status(400).json({ message: "Author already exists" });
     }
     if (req.body.img && !req.body.img.startsWith("http")) {
       req.body.img = await addImgurImage(req.body.img);
+      console.log(req.body.img);
     }
+    const author = new Author(req.body);
     await author.save();
+    console.log(author);
     res.status(201).send(author);
     // console.log("hello")
   } catch (error) {
+    console.log(error);
     res.status(400).send(error);
   }
 };
@@ -33,8 +37,8 @@ exports.getAuthorsNames = async (req, res) => {
 // example of calling the api http://localhost:3001/authors/paginated?page=1&limit=2&name=ajhhd
 exports.getAllWithPagination = async (req, res) => {
   try {
-    const page = req.query.page;
-    const limit = req.query.limit;
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 300;
     const name = req.query.name || "";
     const skip = (page - 1) * Number(limit);
 
@@ -56,7 +60,9 @@ exports.getAllWithPagination = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     sendResponse(res, 500, null, "Failed to fetch author with pagination.");
+    
   }
 };
 
@@ -116,7 +122,7 @@ exports.deleteAuthor = async (req, res) => {
   try {
     const author = await Author.findByIdAndDelete(req.params.id);
     if (!author) {
-      return res.status(404).send("ayhaga");
+      return res.status(404).send("Author not found");
     }
     res.send(author);
   } catch (error) {
