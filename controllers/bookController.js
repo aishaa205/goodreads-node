@@ -4,6 +4,7 @@ const Book = require("../models/book");
 const Category = require("../models/category");
 const mongoose = require("mongoose");
 const { addImgurImage } = require("../utils/imgurImage");
+const sendResponse = require('../utils/responseUtil');
 
 // ana momken 23mel create , get ,update ,delete, w fe get by id 
 
@@ -27,17 +28,49 @@ exports.createBook = async (req, res) => {
     res.status(400).send(error);
   }
 };
-
-exports.getBooks = async (req, res) => {
+// Get all items with pagination and search 
+// example of calling the api http://localhost:3001/books/paginated?page=1&limit=2
+exports.getAllWithPagination = async (req, res) => {
   try {
-    const books = await Book.find()
-      .populate("category", "name")
-      .populate("author", "name");
-    res.status(200).send(books);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const name = req.query.name || '';
+    const skip = (page - 1) * Number(limit);
+
+    // Search filter: Matches if `name` contains the search term (case-insensitive)
+    const filter = name ? { name: { $regex: `.*${name}.*`, $options: "i" } } : {};
+
+    const items = await Book.find(filter)
+    .populate("category", "name")
+    .populate("author", "name")
+    .skip(skip).limit(Number(limit));
+
+    const total = await Book.countDocuments(filter);
+
+    sendResponse(res, 200, {
+      items,
+      pagination: {
+        total,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
-    res.status(500).send(error);
+    sendResponse(res, 500, null, "Failed to fetch books with pagination.");
   }
-};
+}
+
+//exports.getBooks = async (req, res) => {
+//  try {
+//    const books = await Book.find()
+//      .populate("category", "name")
+//      .populate("author", "name");
+//    res.status(200).send(books);
+//  } catch (error) {
+//    res.status(500).send(error);
+//  }
+//};
 
 exports.getBooksPopular = async (req, res) => {
   try {

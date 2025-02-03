@@ -1,5 +1,6 @@
 const Author = require("../models/author");
 const Book = require("../models/book");
+const sendResponse = require('../utils/responseUtil');
 
 exports.createAuthor = async (req, res) => {
   try {
@@ -31,17 +32,19 @@ exports.getAuthorsNames = async (req, res) => {
 };
 
 // Get all items with pagination and search 
-// example of calling the api http://localhost:3001/authors/paginated
+// example of calling the api http://localhost:3001/authors/paginated?page=1&limit=2&name=ajhhd
 exports.getAllWithPagination = async (req, res) => {
   try {
-    const { page = 1, limit = 10, name } = req.body; // Read search term from body
+    const page = req.query.page
+    const limit = req.query.limit
+    const name = req.query.name || '';
     const skip = (page - 1) * Number(limit);
 
     // Search filter: Matches if `name` contains the search term (case-insensitive)
     const filter = name ? { name: { $regex: `.*${name}.*`, $options: "i" } } : {};
 
-    const items = await Model.find(filter).skip(skip).limit(Number(limit));
-    const total = await Model.countDocuments(filter);
+    const items = await Author.find(filter).skip(skip).limit(Number(limit));
+    const total = await Author.countDocuments(filter);
 
     sendResponse(res, 200, {
       items,

@@ -18,12 +18,13 @@ const categoryController = {
     }
   },
 
-  // Get all items with pagination
-  // example of calling the api http://localhost:3001/Categories/paginated
-  // body { page: 1, limit: 10 }
-  getAllWithPagination: async (req, res) => {
+  // Get all items with pagination and search
+  // example of calling the api http://localhost:3001/categories/paginated?page=1&limit=2&name=Rowling
+  getAllWithPagination : async (req, res) => {
     try {
-      const { page = 1, limit = 10, name } = req.body; // Read search term from body
+      const page = req.query.page
+      const limit = req.query.limit
+      const name = req.query.name || '';
       const skip = (page - 1) * Number(limit);
   
       // Search filter: Matches if `name` contains the search term (case-insensitive)
@@ -42,7 +43,7 @@ const categoryController = {
         },
       });
     } catch (error) {
-      sendResponse(res, 500, null, "Failed to fetch category with pagination.");
+      sendResponse(res, 500, null, "Failed to fetch categories with pagination.");
     }
   },
 
