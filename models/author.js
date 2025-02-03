@@ -16,7 +16,7 @@ const authorsSchema = new Schema(
     },
     img: {
       type: String,
-      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaZ_OQlwea8y2F2UvhKMi0DwpNSQLmAkqZ5OaANeCvYtCcMx36_FYABc177om5i8-tnIE&usqp=CAU",
+      default: "https://imgur.com/BYwiZv4",
     },
     views: {
       type: Number,
