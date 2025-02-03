@@ -2,11 +2,11 @@ const Author = require("../models/author");
 
 exports.createAuthor = async (req, res) => {
   try {
-    const author = new Author(req.body);
-    const existingAuthor = await Author.findOne({ name: req.body.name });
     if (req.body.img && !req.body.img.startsWith("http")) {
       req.body.img = await addImgurImage(req.body.img);
     }
+    const author = new Author(req.body);
+    const existingAuthor = await Author.findOne({ name: req.body.name });
     if (existingAuthor) {
       return res.status(400).json({ message: "Author already exists" });
     }
@@ -20,15 +20,7 @@ exports.createAuthor = async (req, res) => {
 
 exports.getAuthors = async (req, res) => {
   try {
-    const authors = await Author.find();
-    res.status(200).send(authors);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-};
-exports.getAuthorsNames = async (req, res) => {
-  try {
-    const authors = await Author.find({}, { _id: 1, name: 1 });
+    const authors = await Author.find().populate("books");
     res.status(200).send(authors);
   } catch (error) {
     res.status(500).send(error);

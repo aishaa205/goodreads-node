@@ -24,13 +24,14 @@ mongoose
   .connect(db_link)
   .then(() => {
     console.log("Connected to MongoDB");
-    createAdminUser();
+    // createAdminUser();
   })
   .catch((error) => console.error("Could not connect to MongoDB", error));
 // Middleware to serve static files from the "views/images" folder
-app.use(express.static(path.join(__dirname, "views")));
+//app.use(express.static(path.join(__dirname, "views")));
 app.use(cors());
 app.use(express.json());
+
 app.use("/categories", categoryRoutes);
 app.use("/books", bookRoutes);
 app.use("/authors", authorRoutes);
