@@ -83,7 +83,7 @@ exports.getBooksPopular = async (req, res) => {
 
 exports.getBook = async (req, res) => {
   try {
-    const book = await Book.findByIdAndUpdate(req.params.id, { $inc: { views: 1 }, new: true }).populate("category", "name").populate("author", "name", "about");
+    const book = await Book.findByIdAndUpdate(req.params.id, { $inc: { views: 1 }, new: true }).populate("category", "name").populate("author", "name about");
     if (!book) {
       return res.status(404).send();
     }
