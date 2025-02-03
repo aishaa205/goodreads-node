@@ -1,4 +1,5 @@
 const Author = require("../models/author");
+const Book = require("../models/book");
 
 exports.createAuthor = async (req, res) => {
   try {
@@ -54,14 +55,28 @@ exports.getAllWithPagination = async (req, res) => {
   } catch (error) {
     sendResponse(res, 500, null, "Failed to fetch author with pagination.");
   }
-},
+}
+
+exports.getAuthorsPopular = async (req, res) => {
+  try {
+    const authors = await Author.find({}).sort({ views: -1 }).limit(20);
+    res.status(200).send(authors);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 
 exports.getAuthor = async (req, res) => {
   try {
-    const author = await Author.findById(req.params.id).populate("books");
+    const author = await Author.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { views: 1 } },
+      { new: true }
+    );
     if (!author) {
       return res.status(404).send();
     }
+
     res.send(author);
   } catch (error) {
     res.status(500).send(error);

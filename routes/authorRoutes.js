@@ -13,12 +13,13 @@ router.post(
 router.get("/paginated",authenticateToken,authorController.getAllWithPagination);
 
 router.get("/names", authenticateToken, authorController.getAuthorsNames);
+router.get("/popular", authenticateToken, authorController.getAuthorsPopular);
 router.get(
   "/:id",
   authenticateToken,
-  authorizeToken,
-  authorController.updateAuthor
+  authorController.getAuthor
 );
+router.put("/:id", authenticateToken, authorizeToken, authorController.updateAuthor);
 router.delete(
   "/:id",
   authenticateToken,

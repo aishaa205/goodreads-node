@@ -45,6 +45,15 @@ const categoryController = {
       sendResponse(res, 500, null, "Failed to fetch category with pagination.");
     }
   },
+
+  getCategoriesPopular: async (req, res) => {
+    try {
+      const items = await Model.find().sort({ views: -1 }).limit(20);
+      sendResponse(res, 200, items);
+    } catch (error) {
+      sendResponse(res, 500, null, "Failed to fetch popular categories.");
+    }
+  },
   
 
   // Get a single item by ID

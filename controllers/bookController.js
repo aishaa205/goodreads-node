@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-const author = require('../models/author');
+const Author = require('../models/author');
 const Book = require("../models/book");
 const Category = require("../models/category");
 const mongoose = require("mongoose");
@@ -39,15 +39,27 @@ exports.getBooks = async (req, res) => {
   }
 };
 
+exports.getBooksPopular = async (req, res) => {
+  try {
+    const books = await Book.find({}).sort({ views: -1 }).limit(20);
+    res.status(200).send(books);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
 exports.getBook = async (req, res) => {
   try {
-    const book = await Book.findById(req.params.id);
+    const book = await Book.findByIdAndUpdate(req.params.id, { $inc: { views: 1 }, new: true }).populate("category", "name").populate("author", "name", "about");
     if (!book) {
       return res.status(404).send();
     }
+    await Category.findByIdAndUpdate(book.category, { $inc: { views: 1 } });
+    await Author.findByIdAndUpdate(book.author, { $inc: { views: 1 } });
     res.send(book);
   } catch (error) {
     res.status(500).send(error);
+    console.log(error);
   }
 };
 

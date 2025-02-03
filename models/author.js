@@ -16,12 +16,11 @@ const authorsSchema = new Schema(
     },
     img: {
       type: String,
-      default: "http://localhost:3001/views/images/defaultPP.jpg",
+      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaZ_OQlwea8y2F2UvhKMi0DwpNSQLmAkqZ5OaANeCvYtCcMx36_FYABc177om5i8-tnIE&usqp=CAU",
     },
     views: {
       type: Number,
       default: 0, // Starts at 0 when a new document is created
-      min: 0, // Ensures views cannot be negative
     },
   },
   { timestamps: true } //
