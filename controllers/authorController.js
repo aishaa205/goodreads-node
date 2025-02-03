@@ -4,13 +4,13 @@ const sendResponse = require('../utils/responseUtil');
 
 exports.createAuthor = async (req, res) => {
   try {
-    if (req.body.img && !req.body.img.startsWith("http")) {
-      req.body.img = await addImgurImage(req.body.img);
-    }
     const author = new Author(req.body);
     const existingAuthor = await Author.findOne({ name: req.body.name });
     if (existingAuthor) {
       return res.status(400).json({ message: "Author already exists" });
+    }
+    if (req.body.img && !req.body.img.startsWith("http")) {
+      req.body.img = await addImgurImage(req.body.img);
     }
     await author.save();
     res.status(201).send(author);

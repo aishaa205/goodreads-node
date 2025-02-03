@@ -75,9 +75,6 @@ const categoryController = {
   // body { name: "New name" , description: "New description" }
   createOne: async (req, res) => {
     try {
-      if (req.body.img && !req.body.img.startsWith("http")) {
-        req.body.img = await addImgurImage(req.body.img);
-      }
       const item = await Model.create(req.body);
       sendResponse(res, 201, item, "Category created successfully.");
     } catch (error) {
