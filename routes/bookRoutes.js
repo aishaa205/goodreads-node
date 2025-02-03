@@ -7,7 +7,8 @@ const authenticateToken = require("../middleware/authenticate");
 //post ->create , put -> update
 
 router.post("/", authenticateToken, authorizeToken, bookController.createBook);
-router.get("/paginated", authenticateToken, bookController.getAllWithPagination);
+// router.get("/paginated", authenticateToken, bookController.getAllWithPagination);
+router.get("/", authenticateToken, bookController.getBooks);
 router.get("/filter", authenticateToken, bookController.getBooksfilter);
 router.get("/popular", authenticateToken, bookController.getBooksPopular);
 router.get("/:id", authenticateToken, bookController.getBook);

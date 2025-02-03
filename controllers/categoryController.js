@@ -18,6 +18,18 @@ const categoryController = {
     }
   },
 
+  getCategories: async (req, res) => {
+    try {
+      const categories = await Category.find()
+      res.status(200).send(categories);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+   },
+
+
+
+
   // Get all items with pagination and search
   // example of calling the api http://localhost:3001/categories/paginated?page=1&limit=2&name=Rowling
   getAllWithPagination : async (req, res) => {

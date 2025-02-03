@@ -5,7 +5,9 @@ const authorizeToken = require("../middleware/authorize");
 const authenticateToken = require("../middleware/authenticate");
 
 router.get("/", authenticateToken, categoryController.getAllNames);
-router.get("/paginated",authenticateToken,categoryController.getAllWithPagination);
+// router.get("/paginated",authenticateToken,categoryController.getAllWithPagination);
+router.get("/",authenticateToken,categoryController.getCategories);
+
 router.get("/popular",authenticateToken,categoryController.getCategoriesPopular);
 router.get("/:id", authenticateToken, categoryController.getOne);
 router.post("/",authenticateToken,authorizeToken,categoryController.createOne);

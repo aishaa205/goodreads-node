@@ -61,16 +61,16 @@ exports.getAllWithPagination = async (req, res) => {
   }
 }
 
-//exports.getBooks = async (req, res) => {
-//  try {
-//    const books = await Book.find()
-//      .populate("category", "name")
-//      .populate("author", "name");
-//    res.status(200).send(books);
-//  } catch (error) {
-//    res.status(500).send(error);
-//  }
-//};
+exports.getBooks = async (req, res) => {
+ try {
+   const books = await Book.find()
+     .populate("category", "name")
+     .populate("author", "name");
+   res.status(200).send(books);
+ } catch (error) {
+   res.status(500).send(error);
+ }
+};
 
 exports.getBooksPopular = async (req, res) => {
   try {
