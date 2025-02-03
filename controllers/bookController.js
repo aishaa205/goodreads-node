@@ -1,72 +1,79 @@
-const Book = require('../models/book');
- 
+const { default: axios } = require("axios");
+const Book = require("../models/book");
+const { addImgurImage } = require("../utils/imgurImage");
 
-// ana momken 23mel create , get ,update ,delete, w fe get by id 
-
-
+// ana momken 23mel create , get ,update ,delete, w fe get by id
 
 exports.createBook = async (req, res) => {
-    try {
-      const book = new Book(req.body);
-      await book.save();
-  
-      res.status(201).send(book);
-    } catch (error) {
-      res.status(400).send(error);
+  try {
+    if (req.body.img && !req.body.img.startsWith("http")) {
+      req.body.img = await addImgurImage(req.body.img);
     }
-  };
 
-  exports.getBooks = async (req, res) => {
-    try {
-      const books = await Book.find().populate('category', 'name').populate('author', 'name');
-      res.status(200).send(books);
-    } catch (error) {
-      res.status(500).send(error);
+    const book = new Book(req.body);
+    await book.save();
+
+    res.status(201).send(book);
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
+
+exports.getBooks = async (req, res) => {
+  try {
+    const books = await Book.find()
+      .populate("category", "name")
+      .populate("author", "name");
+    res.status(200).send(books);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+exports.getBook = async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).send();
     }
-  };
-  
+    res.send(book);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 
-  exports.getBook = async (req, res) => {
-    try {
-      const book = await Book.findById(req.params.id);
-      if (!book) {
-        return res.status(404).send();
-      }
-      res.send(book);
-    } catch (error) {
-      res.status(500).send(error);
+exports.updateBook = async (req, res) => {
+  try {
+    if (req.body.img && !req.body.img.startsWith("http")) {
+      req.body.img = await addImgurImage(req.body.img);
     }
-  };
-
-
-  exports.updateBook = async (req, res) => {
-    try {
-      const image = req.body.img;
-      req.body.img = null;
-      const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (!book) {
-        return res.status(404).send();
-      }
-      res.send(book);
-    } catch (error) {
-      res.status(400).send(error);
+    const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!book) {
+      return res.status(404).send();
     }
-  };
+    res.send(book);
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
 
-
-  exports.deleteBook = async (req, res) => {
-    try {
-      const book = await Book.findByIdAndDelete(req.params.id);
-      if (!book) {
-        return res.status(404).send();
-      }
-      res.send(book);
-    } catch (error) {
-      res.status(500).send(error);
+exports.deleteBook = async (req, res) => {
+  try {
+    const book = await Book.findByIdAndDelete(req.params.id);
+    if (!book) {
+      return res.status(404).send();
     }
-  };
+    res.send(book);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 
-  // filter matense4
+// filter matense4
 
 //   const Category = require("../models/category"); // Assuming you have a Category model
 // const Author = require("../models/author"); // Assuming you have an Author model
@@ -149,13 +156,12 @@ exports.getBooksfilter = async (req, res) => {
     }
 
     // Fetch books with applied filters
-    const books = await Book.find(filter).populate("category").populate("author");
+    const books = await Book.find(filter)
+      .populate("category")
+      .populate("author");
 
     res.status(200).json(books);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-  
