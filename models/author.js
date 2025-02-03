@@ -18,12 +18,6 @@ const authorsSchema = new Schema(
       type: String,
       default: "http://localhost:3001/views/images/defaultPP.jpg",
     },
-    books: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Book",
-      },
-    ],
     views: {
       type: Number,
       default: 0, // Starts at 0 when a new document is created

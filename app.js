@@ -14,14 +14,9 @@ const routes = require("./routes");
 const app = express();
 const path = require("path");
 
-const passport = require("passport");
-require("./config/passport");
+//const passport = require("passport");
+//require("./config/passport");
 const authRoutes = require("./routes/auth");
-
-const passport = require("passport");
-require("./config/passport");
-const authRoutes = require("./routes/auth");
-
 
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
@@ -46,7 +41,7 @@ app.use("/bookReviews", bookReviews);
 app.use("/usercategories", userCategoryRoutes);
 app.use("/siteContent", siteContentRoutes);
 // app.use("/users", userRoutes);
-app.use(passport.initialize());
+//app.use(passport.initialize());
 app.use("/auth", authRoutes);
 app.use(routes);
 

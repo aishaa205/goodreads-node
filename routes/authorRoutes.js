@@ -10,7 +10,8 @@ router.post(
   authorizeToken,
   authorController.createAuthor
 );
-router.get("/", authenticateToken, authorController.getAuthors);
+router.get("/paginated",authenticateToken,authorController.getAllWithPagination);
+
 router.get("/names", authenticateToken, authorController.getAuthorsNames);
 router.get(
   "/:id",

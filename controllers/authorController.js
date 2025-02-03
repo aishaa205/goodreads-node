@@ -18,14 +18,43 @@ exports.createAuthor = async (req, res) => {
   }
 };
 
-exports.getAuthors = async (req, res) => {
+
+
+exports.getAuthorsNames = async (req, res) => {
   try {
-    const authors = await Author.find().populate("books");
+    const authors = await Author.find({}, { _id: 1, name: 1 });
     res.status(200).send(authors);
   } catch (error) {
     res.status(500).send(error);
   }
 };
+
+// Get all items with pagination and search 
+// example of calling the api http://localhost:3001/authors/paginated
+exports.getAllWithPagination = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, name } = req.body; // Read search term from body
+    const skip = (page - 1) * Number(limit);
+
+    // Search filter: Matches if `name` contains the search term (case-insensitive)
+    const filter = name ? { name: { $regex: `.*${name}.*`, $options: "i" } } : {};
+
+    const items = await Model.find(filter).skip(skip).limit(Number(limit));
+    const total = await Model.countDocuments(filter);
+
+    sendResponse(res, 200, {
+      items,
+      pagination: {
+        total,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    sendResponse(res, 500, null, "Failed to fetch author with pagination.");
+  }
+},
 
 exports.getAuthor = async (req, res) => {
   try {
