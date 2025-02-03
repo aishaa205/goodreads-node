@@ -4,6 +4,9 @@ exports.createAuthor = async (req, res) => {
   try {
     const author = new Author(req.body);
     const existingAuthor = await Author.findOne({ name: req.body.name });
+    if (req.body.img && !req.body.img.startsWith("http")) {
+      req.body.img = await addImgurImage(req.body.img);
+    }
     if (existingAuthor) {
       return res.status(400).json({ message: "Author already exists" });
     }
@@ -17,7 +20,15 @@ exports.createAuthor = async (req, res) => {
 
 exports.getAuthors = async (req, res) => {
   try {
-    const authors = await Author.find().populate("books");
+    const authors = await Author.find();
+    res.status(200).send(authors);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+exports.getAuthorsNames = async (req, res) => {
+  try {
+    const authors = await Author.find({}, { _id: 1, name: 1 });
     res.status(200).send(authors);
   } catch (error) {
     res.status(500).send(error);
@@ -38,6 +49,9 @@ exports.getAuthor = async (req, res) => {
 
 exports.updateAuthor = async (req, res) => {
   try {
+    if (req.body.img && !req.body.img.startsWith("http")) {
+      req.body.img = await addImgurImage(req.body.img);
+    }
     const author = await Author.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });

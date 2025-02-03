@@ -8,7 +8,7 @@ const categoryController = {
   // example of calling the api http://localhost:3001/Categories/
   getAllNames: async (req, res) => {
     try {
-      const result = await Model.find().select('name _id');
+      const result = await Model.find({}, { _id: 1, name: 1 });
       if (!result) {
         return sendResponse(res, 404, null, "No categories found.");
       }
@@ -65,6 +65,9 @@ const categoryController = {
   // body { name: "New name" , description: "New description" }
   createOne: async (req, res) => {
     try {
+      if (req.body.img && !req.body.img.startsWith("http")) {
+        req.body.img = await addImgurImage(req.body.img);
+      }
       const item = await Model.create(req.body);
       sendResponse(res, 201, item, "Category created successfully.");
     } catch (error) {
@@ -87,6 +90,9 @@ const categoryController = {
   // example of calling the api http://localhost:3001/Categories/64f4b7b6b5b5b5b5b5b5b5b5
   updateOne: async (req, res) => {
     try {
+      if (req.body.img && !req.body.img.startsWith("http")) {
+        req.body.img = await addImgurImage(req.body.img);
+      }
       // Check for duplicate before updating
       const existingItem = await Model.findOne({ name: req.body.name });
       if (existingItem && existingItem._id.toString() !== req.params.id) {
