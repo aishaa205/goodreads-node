@@ -4,15 +4,8 @@ const categoryController = require("../controllers/categoryController");
 const authorizeToken = require("../middleware/authorize");
 const authenticateToken = require("../middleware/authenticate");
 
-<<<<<<< Updated upstream
-router.get("/", authenticateToken, categoryController.getAllNames);
-// router.get("/paginated",authenticateToken,categoryController.getAllWithPagination);
-router.get("/",authenticateToken,categoryController.getCategories);
-
-=======
 router.get("/names", authenticateToken, categoryController.getAllNames);
 router.get("/paginated",authenticateToken,categoryController.getAllWithPagination);
->>>>>>> Stashed changes
 router.get("/popular",authenticateToken,categoryController.getCategoriesPopular);
 router.get("/:id", authenticateToken, categoryController.getOne);
 router.post("/",authenticateToken,authorizeToken,categoryController.createOne);

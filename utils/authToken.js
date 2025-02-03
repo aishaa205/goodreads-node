@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const secretKey = process.env.JWT_SECRET;
-const expiresIn = "3h";
+const expiresIn = "10h";
 const generateToken = (user) => {
   const payload = {
     id: user._id,
