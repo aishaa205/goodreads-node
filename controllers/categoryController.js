@@ -55,6 +55,9 @@ const categoryController = {
   // Create an item
   createOne: async (req, res) => {
     try {
+      if (req.body.img && !req.body.img.startsWith("http")) {
+        req.body.img = await addImgurImage(req.body.img);
+      }
       const item = await Model.create(req.body);
       sendResponse(res, 201, item, "Item created successfully.");
     } catch (error) {
@@ -70,6 +73,9 @@ const categoryController = {
   // Update an item with validation handling
   updateOne: async (req, res) => {
     try {
+      if (req.body.img && !req.body.img.startsWith("http")) {
+        req.body.img = await addImgurImage(req.body.img);
+      }
       const item = await Model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
