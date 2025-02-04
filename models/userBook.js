@@ -13,12 +13,13 @@ const userBooksSchema = new mongoose.Schema({
     required: [true, "Please enter a Book"],
   },
   state: {
-    type: Number,
+    type: String,
+    enum: ["read", "is reading", "want to read"],
+    default: "want to read",
     required: [true, "Please enter a State"],
   },
   rating: {
     type: Number,
-    required: [true, "Please enter Your rating"],
   },
   review: {
     type: String,

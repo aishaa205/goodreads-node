@@ -1,36 +1,43 @@
-const userBook = require('../models/userBook');
+const userBook = require("../models/userBook");
 // const User = require('../models/user');
 // const Book = require('../models/book');
 
-
 exports.createUserBook = async (req, res) => {
   try {
+    console.log("test");
     const newUserBook = new userBook(req.body);
+    const existingUserBook = await userBook.findOne({
+      user: req.body.user,
+      book: req.body.book,
+    });
+    console.log(existingUserBook);
+    if (existingUserBook) {
+      return res.status(400).json({ message: "UserBook already exists" });
+    }
     await newUserBook.save();
-
-
     res.status(201).send(newUserBook);
   } catch (error) {
-    console.log(error)
-    res.status(400).send('error');
+    console.log(error);
+    res.status(400).send("error");
   }
 };
 
-
-
 exports.getUserBooks = async (req, res) => {
   try {
-    const userBooks = await userBook.find().populate('user').populate('book');
+    const userBooks = await userBook.find().populate("user").populate("book");
     res.status(200).send(userBooks);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send(error);
   }
 };
 
 exports.getUserBook = async (req, res) => {
   try {
-    const userBook = await userBook.findById(req.params.id).populate('user').populate('book');
+    const userBook = await userBook
+      .findById(req.params.id)
+      .populate("user")
+      .populate("book");
     if (!userBook) {
       return res.status(404).send();
     }
@@ -42,7 +49,9 @@ exports.getUserBook = async (req, res) => {
 
 exports.updateUserBook = async (req, res) => {
   try {
-    const userBook = await userBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const userBook = await userBook.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     if (!userBook) {
       return res.status(404).send();
     }
