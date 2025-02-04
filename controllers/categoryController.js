@@ -1,9 +1,8 @@
 const Category = require("../models/category");
-const sendResponse = require('../utils/responseUtil');
+const sendResponse = require("../utils/responseUtil");
 
 const Model = Category;
 const categoryController = {
-
   // Get all category names and their IDs
   // example of calling the api http://localhost:3001/Categories/
   getAllNames: async (req, res) => {
@@ -14,37 +13,37 @@ const categoryController = {
       }
       sendResponse(res, 200, result);
     } catch (error) {
+      console.log(error);
       sendResponse(res, 500, null, "Failed to fetch items.");
     }
   },
 
   getCategories: async (req, res) => {
     try {
-      const categories = await Category.find()
+      const categories = await Category.find();
       res.status(200).send(categories);
     } catch (error) {
       res.status(500).send(error);
     }
-   },
-
-
-
+  },
 
   // Get all items with pagination and search
   // example of calling the api http://localhost:3001/categories/paginated?page=1&limit=2&name=Rowling
-  getAllWithPagination : async (req, res) => {
+  getAllWithPagination: async (req, res) => {
     try {
-      const page = req.query.page
-      const limit = req.query.limit
-      const name = req.query.name || '';
+      const page = req.query.page;
+      const limit = req.query.limit;
+      const name = req.query.name || "";
       const skip = (page - 1) * Number(limit);
-  
+
       // Search filter: Matches if `name` contains the search term (case-insensitive)
-      const filter = name ? { name: { $regex: `.*${name}.*`, $options: "i" } } : {};
-  
+      const filter = name
+        ? { name: { $regex: `.*${name}.*`, $options: "i" } }
+        : {};
+
       const items = await Model.find(filter).skip(skip).limit(Number(limit));
       const total = await Model.countDocuments(filter);
-  
+
       sendResponse(res, 200, {
         items,
         pagination: {
@@ -55,7 +54,12 @@ const categoryController = {
         },
       });
     } catch (error) {
-      sendResponse(res, 500, null, "Failed to fetch categories with pagination.");
+      sendResponse(
+        res,
+        500,
+        null,
+        "Failed to fetch categories with pagination."
+      );
     }
   },
 
@@ -67,7 +71,6 @@ const categoryController = {
       sendResponse(res, 500, null, "Failed to fetch popular categories.");
     }
   },
-  
 
   // Get a single item by ID
   // example of calling the api http://localhost:3001/Categories/64f4b7b6b5b5b5b5b5b5b5b5
@@ -95,14 +98,12 @@ const categoryController = {
         return sendResponse(res, 400, null, "Category name already exists.");
         // Handle other validation errors
       } else if (error.name === "ValidationError") {
-        const messages = Object.values(error.errors).map(err => err.message);
+        const messages = Object.values(error.errors).map((err) => err.message);
         return sendResponse(res, 400, null, messages);
       }
-      sendResponse(res, 500, null,  error.message);
+      sendResponse(res, 500, null, error.message);
     }
   },
-  
-  
 
   // Update an item with validation handling
   // body: { name: "New name" , description: "New description" }
@@ -117,27 +118,31 @@ const categoryController = {
       if (existingItem && existingItem._id.toString() !== req.params.id) {
         return sendResponse(res, 400, null, "Category name already exists.");
       }
-  
+
       const item = await Model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
       });
-  
+
       if (!item) {
         return sendResponse(res, 404, null, "Item not found.");
       }
-  
+
       sendResponse(res, 200, item, "Category updated successfully.");
     } catch (error) {
       if (error.name === "ValidationError") {
         const messages = Object.values(error.errors).map((err) => err.message);
         sendResponse(res, 400, null, messages);
       } else {
-        sendResponse(res, 500, null, "Failed to update category. " + error.message);
+        sendResponse(
+          res,
+          500,
+          null,
+          "Failed to update category. " + error.message
+        );
       }
     }
   },
-  
 
   // Delete an item
   deleteOne: async (req, res) => {
