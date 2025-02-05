@@ -66,9 +66,9 @@ const categoryController = {
   getCategoriesPopular: async (req, res) => {
     try {
       const items = await Model.find().sort({ views: -1 }).limit(20);
-      sendResponse(res, 200, items);
+      res.status(200).send(items);
     } catch (error) {
-      sendResponse(res, 500, null, "Failed to fetch popular categories.");
+      res.status(500).send(error);
     }
   },
 
