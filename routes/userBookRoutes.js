@@ -7,6 +7,8 @@ const authenticateToken = require("../middleware/authenticate");
 
 router.post("/", authenticateToken, userBookController.createUserBook);
 router.get("/", authenticateToken, userBookController.getUserBooks);
+// router.get("/:userId", authenticateToken, userBookController.getUserBooks);
+router.get("/:userId", authenticateToken, userBookController.getBooksForUser);
 router.get("/:id", authenticateToken, userBookController.getUserBook);
 router.put("/:id", authenticateToken, userBookController.updateUserBook);
 router.delete("/:id", authenticateToken, userBookController.deleteUserBook);

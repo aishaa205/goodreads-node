@@ -4,12 +4,12 @@ const Schema = mongoose.Schema;
 const userBooksSchema = new mongoose.Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: "User",
     required: [true, "Please enter a User"],
   },
   book: {
     type: Schema.Types.ObjectId,
-    ref: "book",
+    ref: "Book",
     required: [true, "Please enter a Book"],
   },
   state: {

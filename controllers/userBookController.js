@@ -21,27 +21,53 @@ exports.createUserBook = async (req, res) => {
     res.status(400).send("error");
   }
 };
+exports.getBooksForUser = async (req, res) => {
+  try {
+    const userBooks = await userBook
+      .find({ user: req.params.userId }) // Filter by user ID
+      .populate("book"); // Populate book details
+
+    if (!userBooks || userBooks.length === 0) {
+      return res.status(404).json({ message: "No books found for this user" });
+    }
+
+    res.json(userBooks);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 exports.getUserBooks = async (req, res) => {
   try {
-    const userBooks = await userBook.find().populate("user").populate("book");
-    res.status(200).send(userBooks);
+    const userBook = await userBookModel
+      .find({ user: req.params.id }, "_id rating review state ")
+      .populate("user", "name")
+      .populate({
+        path: "book",
+        select: "title img",
+        populate: { path: "author", select: "name" },
+      });
+
+    if (!userBook || userBook.length === 0) {
+      return res.status(404).send({ message: "No books found for this user." });
+    }
+
+    res.send(userBook);
   } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
+    res.status(500).send({ error: error.message });
   }
 };
 
 exports.getUserBook = async (req, res) => {
   try {
-    const userBook = await userBook
+    const userBookData = await userBook
       .findById(req.params.id)
       .populate("user")
       .populate("book");
-    if (!userBook) {
+    if (!userBookData) {
       return res.status(404).send();
     }
-    res.send(userBook);
+    res.send(userBookData);
   } catch (error) {
     res.status(500).send(error);
   }
