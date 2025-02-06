@@ -8,12 +8,12 @@ const booksSchema = new Schema(
     },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "category",
+      ref: "Category",
       required: [true, "Please enter a Category"],
     },
     author: {
       type: Schema.Types.ObjectId,
-      ref: "author",
+      ref: "Author",
       required: [true, "Please enter an Auhtor"],
     },
     description: {

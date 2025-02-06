@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const secretKey = process.env.JWT_SECRET;
-const expiresIn = "10h";
+const expirationAfter = "10h";
 const generateToken = (user) => {
   const payload = {
     id: user._id,
@@ -14,7 +14,7 @@ const generateToken = (user) => {
   };
 
 
-  return jwt.sign(payload, secretKey, { expiresIn: expiresIn }); //return Token that contains userData.
+  return jwt.sign(payload, secretKey, { expiresIn: expirationAfter }); //return Token that contains userData.
 };
 
 //refreshes token for 6hrs,
@@ -28,7 +28,7 @@ const refreshToken = (user) => {
     img: user.img,
     role: user.role,
   };
-  return jwt.sign(payload, secretKey, { expiresIn: expiresIn }); //return Token that contains userData.
+  return jwt.sign(payload, secretKey, { expiresIn: expirationAfter }); //return Token that contains userData.
 };
 
 const verifyToken=(token)=>{

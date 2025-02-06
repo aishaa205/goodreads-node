@@ -49,7 +49,7 @@ const userSchema = new Schema(
     favoriteCategories: [
       {
         type: Schema.Types.ObjectId,
-        ref: "category",
+        ref: "Category",
       },
     ],
     subscription: {

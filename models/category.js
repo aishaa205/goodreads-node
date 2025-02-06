@@ -24,4 +24,4 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true } //add timestamp for each document,
 );
 
-module.exports = mongoose.model("category", categorySchema);
+module.exports = mongoose.model("Category", categorySchema);
