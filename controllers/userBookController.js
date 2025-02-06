@@ -1,4 +1,4 @@
-const userBookModel = require("../models/userBook"); // Ensure correct import
+const userBookModel = require("../models/userBook");
 const { param } = require("../routes");
 // const User = require('../models/user');
 // const Book = require('../models/book');
@@ -18,7 +18,6 @@ exports.createUserBook = async (req, res) => {
     await newUserBook.save();
     res.status(201).send(newUserBook);
   } catch (error) {
-    console.log(error);
     res.status(400).send("error");
   }
 };
@@ -28,7 +27,7 @@ exports.createUserBook = async (req, res) => {
 exports.getUserBooks = async (req, res) => {
   try {
     const userBooks = await userBookModel
-      .find({ user: req.params.id }, "_id rating review state ")
+      .find({ user: req.params.userId }, "_id rating review state ")
       .populate("user", "name")
       .populate({
         path: "book",
@@ -80,6 +79,8 @@ exports.updateUserBook = async (req, res) => {
   }
 };
 
+// example of calling the api http://localhost:3001/userBook/{{id}}
+// delete a user book by id
 exports.deleteUserBook = async (req, res) => {
   try {
     const userBook = await userBookModel.findByIdAndDelete(req.params.id);
@@ -104,8 +105,6 @@ exports.handleRating = async (req, res) => {
     let userBook = await userBookModel.findOne({ book: bookId, user: userId });
 
     if (!userBook) {
-      console.log(req.body);
-
       userBook = new userBookModel({ book: bookId, user: userId, rating });
       await userBook.save();
       return res.status(201).send(userBook);
@@ -116,7 +115,31 @@ exports.handleRating = async (req, res) => {
     await userBook.save();
     res.status(200).send(userBook);
   } catch (error) {
-    console.log(error);
     res.status(500).send({ error: error.message });
   }
 };
+
+
+//create a function to change user book state
+exports.changeUserBookState = async (req, res) => {
+  try {
+    const { state, userId } = req.body;
+    const { bookId } = req.params;
+    console.log(bookId);
+    // Check if user has already added status to this book
+    let userBook = await userBookModel.findOne({ book: bookId, user: userId });
+
+    if (!userBook) {
+      userBook = new userBookModel({ book: bookId, user: userId, state });
+      await userBook.save();
+      return res.status(201).send(userBook);
+    }
+
+    // Update existing status
+    userBook.state = state;
+    await userBook.save();
+    res.status(200).send(userBook);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
