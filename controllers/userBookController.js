@@ -46,6 +46,21 @@ exports.getUserBooks = async (req, res) => {
   }
 };
 
+exports.getBooksForUser = async (req, res) => {
+  try {
+    const userBooks = await userBook
+      .find({ user: req.params.userId }) // Filter by user ID
+      .populate("book"); // Populate book details
+
+    if (!userBooks || userBooks.length === 0) {
+      return res.status(404).json({ message: "No books found for this user" });
+    }
+
+    res.json(userBooks);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 exports.updateUserBook = async (req, res) => {
   try {
