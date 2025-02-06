@@ -23,7 +23,7 @@ exports.createUserBook = async (req, res) => {
   }
 };
 
-// get all user books by userId 
+// get all user books by userId
 // example of calling the api http://localhost:3001/userBook/{{userId}}
 exports.getUserBooks = async (req, res) => {
   try {
@@ -33,8 +33,8 @@ exports.getUserBooks = async (req, res) => {
       .populate({
         path: "book",
         select: "title img",
-        populate: { path: "author", select: "name" }
-      })
+        populate: { path: "author", select: "name" },
+      });
 
     if (userBook.length === 0) {
       return res.status(404).send({ message: "No books found for this user." });
@@ -48,7 +48,7 @@ exports.getUserBooks = async (req, res) => {
 
 exports.getBooksForUser = async (req, res) => {
   try {
-    const userBooks = await userBook
+    const userBooks = await userBookModel
       .find({ user: req.params.userId }) // Filter by user ID
       .populate("book"); // Populate book details
 
@@ -64,9 +64,13 @@ exports.getBooksForUser = async (req, res) => {
 
 exports.updateUserBook = async (req, res) => {
   try {
-    const userBook = await userBookModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const userBook = await userBookModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
     if (!userBook) {
       return res.status(404).send();
     }
@@ -88,14 +92,13 @@ exports.deleteUserBook = async (req, res) => {
   }
 };
 
-
 //example of calling the api http://localhost:3001/userBook/rate/{{bookId}}
 // body {rating: 5 , userId: 1}
-// each user has one rating per book 
+// each user has one rating per book
 exports.handleRating = async (req, res) => {
   try {
-    const { rating , userId } = req.body;
-    const { bookId  } = req.params;
+    const { rating, userId } = req.body;
+    const { bookId } = req.params;
     console.log(bookId);
     // Check if user has already rated this book
     let userBook = await userBookModel.findOne({ book: bookId, user: userId });
@@ -113,7 +116,7 @@ exports.handleRating = async (req, res) => {
     await userBook.save();
     res.status(200).send(userBook);
   } catch (error) {
-   console.log(error);
+    console.log(error);
     res.status(500).send({ error: error.message });
   }
 };
