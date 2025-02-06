@@ -6,7 +6,7 @@ const { param } = require("../routes");
 exports.createUserBook = async (req, res) => {
   try {
     console.log("test");
-    const newUserBook = new userBook(req.body);
+    const newUserBook = new userBookModel(req.body);
     const existingUserBook = await userBookModel.findOne({
       user: req.body.user,
       book: req.body.book,
@@ -27,7 +27,7 @@ exports.createUserBook = async (req, res) => {
 // example of calling the api http://localhost:3001/userBook/{{userId}}
 exports.getUserBooks = async (req, res) => {
   try {
-    const userBook = await userBookModel
+    const userBooks = await userBookModel
       .find({ user: req.params.id }, "_id rating review state ")
       .populate("user", "name")
       .populate({
@@ -36,11 +36,11 @@ exports.getUserBooks = async (req, res) => {
         populate: { path: "author", select: "name" },
       });
 
-    if (userBook.length === 0) {
+    if (userBooks.length === 0) {
       return res.status(404).send({ message: "No books found for this user." });
     }
 
-    res.send(userBook);
+    res.send(userBooks);
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
