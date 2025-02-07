@@ -66,6 +66,7 @@ exports.verifyToken = async (req, res) => {
 };
 
 exports.sendOTP = async (req, res) => {
+  console.log(req.query);
   //generate otp
   const { email } = req.query;
   if (!email) {
@@ -98,8 +99,9 @@ exports.sendOTP = async (req, res) => {
 
 exports.verifyOTP = async (req, res) => {
   try {
-    const { email, otp } = req.body;
+    const { email, otp, type } = req.body;
     const user = await User.findOne({ email });
+    console.log(user.otp, otp, email);
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -112,8 +114,34 @@ exports.verifyOTP = async (req, res) => {
     user.emailVerified = true;
     user.otp = undefined;
     user.otpExpiration = undefined;
+    if(type && type === "password"){
+      user.changePassword = true
+    }
     await user.save();
     res.status(200).json({ message: "Email verified successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error verifying OTP" });
+  }
+};
+
+exports.forgetPassword = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    if (!user.changePassword) {
+      return res
+        .status(400)
+        .json({ message: "Please make a request to change your password" });
+    }
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    user.password = hashedPassword;
+    user.changePassword = false
+    await user.save();
+    res.status(200).json({ message: "User password updated", user });
   } catch (error) {
     res.status(500).json({ message: "Error verifying OTP" });
   }

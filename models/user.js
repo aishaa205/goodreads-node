@@ -55,7 +55,7 @@ const userSchema = new Schema(
     subscription: {
       subscriptionType: {
         type: String,
-        enum: ["free", "monthly", "annualy"],
+        enum: ["free", "premium"],
         default: "free",
         required: function () {
           return this.role === "user"; // Required only for users
