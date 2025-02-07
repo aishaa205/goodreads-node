@@ -13,12 +13,12 @@ const siteContentRoutes = require("./routes/siteContentRoutes");
 const routes = require("./routes");
 const app = express();
 const path = require("path");
-
+app.use(cors());
   
 //////////////////////////
 const fs = require("fs");
 const {google} = require("googleapis");
-// const multer = require("multer");
+const multer = require("multer");
 // access json file
 const apikey = require("./apikey.json");
 
@@ -36,6 +36,16 @@ async function authorize(){
 
 } 
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, "./uploads");
+  }, 
+  filename: function (req, file, cb) {
+       const uniqueSuffix = Date.now() 
+       cb(null, uniqueSuffix+file.originalname)
+  },
+});
+const upload = multer({ storage: storage })
 
 async function uploadFile(authClient, filePath, fileName) {
   const drive = google.drive({ version: "v3", auth: authClient });
@@ -85,22 +95,39 @@ async function uploadFile(authClient, filePath, fileName) {
 
 
 
-(async () => {
+// (async () => {
+//   try {
+//     const authClient = await authorize();
+//     const filePath = "./pdftest.pdf"; // Local file path
+//     const fileName = "MyUploadedFile123.pdf"; // Desired name in Google Drive
+
+//     const fileUrl = await uploadFile(authClient, filePath, fileName);
+//     console.log("Embedded File Link:", fileUrl);
+//   } catch (error) {
+//     console.error("Error:", error.message);
+//   }
+// })();
+
+
+
+app.post("/upload", upload.single("file"), async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded!" });
+    }
+
     const authClient = await authorize();
-    const filePath = "./pdftest.pdf"; // Local file path
-    const fileName = "MyUploadedFile.pdf"; // Desired name in Google Drive
+    const fileUrl = await uploadFile(authClient, req.file.path, req.file.originalname);
 
-    const fileUrl = await uploadFile(authClient, filePath, fileName);
-    console.log("Embedded File Link:", fileUrl);
+    // Delete the temporary file after upload
+    // fs.unlinkSync(req.file.path);
+
+    res.status(200).json({ fileUrl });
   } catch (error) {
-    console.error("Error:", error.message);
+    console.error("Error uploading file:", error);
+    res.status(500).json({ message: "Failed to upload file", error: error.message });
   }
-})();
-
-
-
-
+});
 
 
  
@@ -127,16 +154,6 @@ async function uploadFile(authClient, filePath, fileName) {
 
 
 // //storege b destination mo3ayan w link
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//       cb(null, "./test2.pdf");
-//   }, 
-//   filename: function (req, file, cb) {
-//        const uniqueSuffix = Date.now() 
-//        cb(null, uniqueSuffix+file.originalname)
-//   },
-// });
-// const upload = multer({ storage: storage })
 
 // app.post("/upload-files", upload.single("file"), async (req, res) => {
 //   try {
@@ -163,7 +180,7 @@ mongoose
   .catch((error) => console.error("Could not connect to MongoDB", error));
 // Middleware to serve static files from the "views/images" folder
 app.use(express.static(path.join(__dirname, "views")));
-app.use(cors());
+
 app.use(express.json());
 
 app.use("/categories", categoryRoutes);
