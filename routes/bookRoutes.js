@@ -4,8 +4,6 @@ const router = express.Router();
 const authorizeToken = require("../middleware/authorize");
 const authenticateToken = require("../middleware/authenticate");
 
-//post ->create , put -> update
-
 router.post("/", authenticateToken, authorizeToken, bookController.createBook);
 router.get("/paginated", authenticateToken, bookController.getAllWithPagination);
 router.get("/", authenticateToken, bookController.getBooks);

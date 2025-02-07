@@ -6,10 +6,6 @@ const mongoose = require("mongoose");
 const { addImgurImage } = require("../utils/imgurImage");
 const sendResponse = require('../utils/responseUtil');
 
-// ana momken 23mel create , get ,update ,delete, w fe get by id 
-
-
-
 exports.createBook = async (req, res) => {
   try {
     const existingBook = await Book.findOne({ title, author, edition });

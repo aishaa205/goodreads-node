@@ -24,6 +24,6 @@ const userBooksSchema = new mongoose.Schema({
   review: {
     type: String,
   },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("UserBook", userBooksSchema);
