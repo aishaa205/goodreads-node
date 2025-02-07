@@ -2,18 +2,23 @@ const UserBook = require("../models/userBook");
 const sendResponse = require("../utils/responseUtil");
 
 const bookReviewController = {
+
+
   // Get book reviews by book ID
+  // example of calling the api http://localhost:3001/bookReview/{{id}}
   getAll: async (req, res) => {
     try {
       const { id } = req.params;
-      const reviews = await UserBook.find({ book: id });
+      const reviews = await UserBook.find({ book: id })
+      .populate("user", "name")
+      .populate("book", "title img");
 
       if (!reviews || reviews.length === 0) {
-        return sendResponse(res, 404, null, "No reviews found for this book");
+        return res.status(404).json({ message: "No reviews found for this book" });
       }
-      sendResponse(res, 200, reviews);
+      res.status(201).send(reviews);
     } catch (error) {
-      sendResponse(res, 500, null, "Error getting book reviews");
+      res.status(500).send({ error: error.message });
     }
   },
 

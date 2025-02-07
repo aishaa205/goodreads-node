@@ -1,7 +1,5 @@
 const userBookModel = require("../models/userBook");
 const { param } = require("../routes");
-// const User = require('../models/user');
-// const Book = require('../models/book');
 
 exports.createUserBook = async (req, res) => {
   try {
@@ -100,7 +98,6 @@ exports.handleRating = async (req, res) => {
   try {
     const { rating, userId } = req.body;
     const { bookId } = req.params;
-    console.log(bookId);
     // Check if user has already rated this book
     let userBook = await userBookModel.findOne({ book: bookId, user: userId });
 
@@ -125,7 +122,6 @@ exports.changeUserBookState = async (req, res) => {
   try {
     const { state, userId } = req.body;
     const { bookId } = req.params;
-    console.log(bookId);
     // Check if user has already added status to this book
     let userBook = await userBookModel.findOne({ book: bookId, user: userId });
 
@@ -143,3 +139,27 @@ exports.changeUserBookState = async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 }
+
+//example of calling the api http://localhost:3001/userBook/review/{{bookId}}
+// body {review: "This is a review" , userId: 1}
+// each user has one review per book
+exports.handleReview = async (req, res) => {
+  try {
+    const { review, userId } = req.body;
+    const { bookId } = req.params;
+    // Check if user has already rated this book
+    let userBook = await userBookModel.findOne({ book: bookId, user: userId });
+    if (!userBook) {
+      userBook = new userBookModel({ book: bookId, user: userId, review });
+      await userBook.save();
+      return res.status(201).send(userBook);
+    }
+
+    // Update existing review
+    userBook.review = review;
+    await userBook.save();
+    res.status(200).send(userBook);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
