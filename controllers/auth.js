@@ -131,6 +131,7 @@ exports.forgetPassword = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
+    console.log(user)
     if (!user.changePassword) {
       return res
         .status(400)

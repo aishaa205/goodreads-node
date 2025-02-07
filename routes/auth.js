@@ -9,7 +9,7 @@ router.post("/login", authControllers.loginUser);
 router.post("/verify", authControllers.verifyToken);
 router.post("/send-otp", authControllers.sendOTP);
 router.post("/verify-otp", authControllers.verifyOTP);
-router.post("/forget", authControllers.forgetPassword);
+router.post("/forget-password", authControllers.forgetPassword);
 
 // Google OAuth Route redirects the user to the Google OAuth login page.
 router.get("/google",passport.authenticate("google", { scope: ["profile", "email"] }));
