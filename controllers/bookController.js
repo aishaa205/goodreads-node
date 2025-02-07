@@ -5,6 +5,7 @@ const Category = require("../models/category");
 const mongoose = require("mongoose");
 const { addImgurImage } = require("../utils/imgurImage");
 const sendResponse = require('../utils/responseUtil');
+const {uploadFile}=require ("../utils/googleDrive");
 
 // ana momken 23mel create , get ,update ,delete, w fe get by id 
 
@@ -28,6 +29,51 @@ exports.createBook = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+
+
+
+
+// exports.createBook = async (req, res) => {
+//   try {
+//     const { title, category, author, description, edition } = req.body;
+    
+//     // Check if book already exists
+//     const existingBook = await Book.findOne({ title, author, edition });
+//     if (existingBook) {
+//       return res.status(400).json({ success: false, message: "Book already exists." });
+//     }
+
+//     let pdfUrl = "";
+//     if (req.file) {
+//       pdfUrl = await uploadFileToDrive(req.file.buffer, req.file.originalname, req.file.mimetype);
+//     }
+
+//     // Handle image upload if not a URL
+//     let imgUrl = req.body.img;
+//     if (imgUrl && !imgUrl.startsWith("http")) {
+//       imgUrl = await addImgurImage(imgUrl);
+//     }
+
+//     const book = new Book({
+//       title,
+//       category,
+//       author,
+//       description,
+//       edition,
+//       pdfUrl,
+//       img: imgUrl,
+//     });
+
+//     await book.save();
+//     res.status(201).json({ success: true, book });
+//   } catch (error) {
+//     console.error("Error creating book:", error);
+//     res.status(500).json({ success: false, message: "Error creating book", error });
+//   }
+// };
+
+
 // Get all items with pagination and search 
 // example of calling the api http://localhost:3001/books/paginated?page=1&limit=2
 exports.getAllWithPagination = async (req, res) => {
@@ -61,15 +107,24 @@ exports.getAllWithPagination = async (req, res) => {
   }
 }
 
+// exports.getBooks = async (req, res) => {
+//  try {
+//    const books = await Book.find()
+//      .populate("category", "name")
+//      .populate("author", "name");
+//    res.status(200).send(books);
+//  } catch (error) {
+//    res.status(500).send(error);
+//  }
+// };
+
 exports.getBooks = async (req, res) => {
- try {
-   const books = await Book.find()
-     .populate("category", "name")
-     .populate("author", "name");
-   res.status(200).send(books);
- } catch (error) {
-   res.status(500).send(error);
- }
+  try {
+    const books = await Book.find().populate("category", "name").populate("author", "name");
+    res.status(200).json(books);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching books", error });
+  }
 };
 
 exports.getBooksPopular = async (req, res) => {

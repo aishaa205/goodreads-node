@@ -14,101 +14,96 @@ const routes = require("./routes");
 const app = express();
 const path = require("path");
 
-
   
 //////////////////////////
-// const fs = require("fs");
-// const {google} = require("googleapis");
+const fs = require("fs");
+const {google} = require("googleapis");
 // const multer = require("multer");
-// // access json file
-// const apikey = require("./apikey.json");
+// access json file
+const apikey = require("./apikey.json");
 
-// const SCOPE = ['https://www.googleapis.com/auth/drive'];
-// // Authorization to google drive 
-// async function authorize(){
-//    const jwtClient = new  google.auth.JWT(
-//      apikey.client_email,
-//      null ,
-//      apikey.private_key,
-//      SCOPE
-//    );
-//   await jwtClient.authorize();
-//   return jwtClient;
+const SCOPE = ['https://www.googleapis.com/auth/drive'];
+// Authorization to google drive 
+async function authorize(){
+   const jwtClient = new  google.auth.JWT(
+     apikey.client_email,
+     null ,
+     apikey.private_key,
+     SCOPE
+   );
+  await jwtClient.authorize();
+  return jwtClient;
 
-// } 
-
-///////////////da el 2deem
-// //upload file to google drive 
-// async function uploadFile(authClient){
-//   return new Promise((resolve,rejected)=>{
-//       const drive = google.drive({version:'v3',auth:authClient}); 
-
-//       // Validate file format
-//       if (path.extname('./test.pdf').toLowerCase() !== '.pdf') {
-//         return reject(new Error('Only PDF files are allowed!'));
-//       }
-
-//       // accept ay file m4 pdf bs
-//       var fileMetaData = {
-//           name:'',    
-//           parents:['16sqCCx5yT5Lrm4TJAcDeXG4RuPJHP-Xv'] //el folder id mn el url bta3 drive
-//       }
-//       drive.files.create({
-//           resource:fileMetaData,
-//           media:{
-//               body: fs.createReadStream('./test.pdf'), // files that will get uploaded
-//               mimeType: 'application/pdf'
-//           },
-//           fields:'id'
-//       },function(error,file){
-//           if(error){
-//               return rejected(error)
-//           }
-//           resolve(file);
-//       })
-//   });
-// }
-// authorize().then(uploadFile).catch("error",console.error());
+} 
 
 
-///////da el gded
+async function uploadFile(authClient, filePath, fileName) {
+  const drive = google.drive({ version: "v3", auth: authClient });
 
-// async function uploadFile(authClient, filePath, fileName) {
-//   const drive = google.drive({ version: "v3", auth: authClient });
+  const fileMetaData = {
+    name: fileName,
+    parents: ["16sqCCx5yT5Lrm4TJAcDeXG4RuPJHP-Xv"], 
+  };
 
-//   const fileMetaData = {
-//       name: fileName,
-//       parents: ["16sqCCx5yT5Lrm4TJAcDeXG4RuPJHP-Xv"], 
-//   };
+  const media = {
+    mimeType: "application/pdf",
+    body: fs.createReadStream(filePath),
+  };
 
-//   const media = {
-//       mimeType: "application/pdf",
-//       body: fs.createReadStream(filePath),
-//   };
+  try {
+    const response = await drive.files.create({
+      resource: fileMetaData,
+      media: media,
+      fields: "id",
+    });
 
-//   try {
-//       const response = await drive.files.create({
-//           resource: fileMetaData,
-//           media: media,
-//           fields: "id",
-//       });
+    const fileId = response.data.id;
+    console.log("response",response);
+    //kda el file accessible
+    await drive.permissions.create({
+      fileId: fileId,
+      requestBody: {
+        role: "reader",
+        type: "anyone",
+      },
+    });
 
-//       // Construct file URL
-//       const fileId = response.data.id;
-//       const fileUrl = `https://drive.google.com/uc?id=${fileId}`;
+    // embedded link
+    const fileUrl = `https://drive.google.com/file/d/${fileId}/preview`;
 
-//       // Delete file from local storage after uploading
-//       fs.unlinkSync(filePath);
+    // Delete file from local storage after successful upload
+    //hal ha7tagha ?
+    fs.unlinkSync(filePath);
 
-//       return fileUrl;
-//   } catch (error) {
-//       console.error("Error uploading file:", error);
-//       throw error;
-//   }
-// }
+    return fileUrl;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
+}
 
 
 
+
+(async () => {
+  try {
+    const authClient = await authorize();
+    const filePath = "./pdftest.pdf"; // Local file path
+    const fileName = "MyUploadedFile.pdf"; // Desired name in Google Drive
+
+    const fileUrl = await uploadFile(authClient, filePath, fileName);
+    console.log("Embedded File Link:", fileUrl);
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+})();
+
+
+
+
+
+
+ 
 // app.post("/upload-files", upload.single("pdf"), async (req, res) => {
 //   try {
 //       if (!req.file) {
@@ -125,20 +120,16 @@ const path = require("path");
 // });
 
 
-// app.listen(3001, () => {
-//   console.log("Server is running on port 3001");
-// });
 
 
-
-/////////
+// ///////
 // const multer = require("multer");
 
 
 // //storege b destination mo3ayan w link
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
-//       cb(null, "./files");
+//       cb(null, "./test2.pdf");
 //   }, 
 //   filename: function (req, file, cb) {
 //        const uniqueSuffix = Date.now() 
@@ -147,13 +138,16 @@ const path = require("path");
 // });
 // const upload = multer({ storage: storage })
 
-// app.post("/upload-files",upload.single("file"),async(req,res)=>{
-//   console.log(req.file);
-//   })
+// app.post("/upload-files", upload.single("file"), async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ message: "No file uploaded!" });
+//     }
 
 
-//const passport = require("passport");
-//require("./config/passport");
+
+// const passport = require("passport");
+// require("./config/passport");
 // const authRoutes = require("./routes/auth");
 
 app.use(express.json({ limit: "5mb" }));
@@ -180,7 +174,6 @@ app.use("/usercategories", userCategoryRoutes);
 app.use("/siteContent", siteContentRoutes);
 // app.use("/users", userRoutes);
 //app.use(passport.initialize());
-app.use("/auth", authRoutes);
 app.use(routes);
 
 // UserBooks routes

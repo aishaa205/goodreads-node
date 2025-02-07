@@ -24,6 +24,7 @@ const booksSchema = new Schema(
       type: String,
       default: "https://imgur.com/BYwiZv4",
     },
+    // pdfUrl: String,
     url: {
       type: String,
       validate: {
