@@ -12,7 +12,6 @@ router.get(
 );
 router.get(
   "/popular",
-  authenticateToken,
   categoryController.getCategoriesPopular
 );
 router.get("/:id", authenticateToken, categoryController.getOne);

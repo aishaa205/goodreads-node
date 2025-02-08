@@ -14,7 +14,7 @@ router.get("/paginated",authenticateToken,authorController.getAllWithPagination)
 router.get("/", authenticateToken, authorController.getAuthors);
 
 router.get("/names", authenticateToken, authorController.getAuthorsNames);
-router.get("/popular", authenticateToken, authorController.getAuthorsPopular);
+router.get("/popular", authorController.getAuthorsPopular);
 router.get("/:id", authenticateToken, authorController.getAuthor);
 router.put(
   "/:id",
