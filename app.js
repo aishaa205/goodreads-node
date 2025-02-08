@@ -120,7 +120,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     const fileUrl = await uploadFile(authClient, req.file.path, req.file.originalname);
 
     // Delete the temporary file after upload
-    // fs.unlinkSync(req.file.path);
+    fs.unlinkSync(req.file.path);
 
     res.status(200).json({ fileUrl });
   } catch (error) {
