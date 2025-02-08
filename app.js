@@ -35,7 +35,7 @@ async function authorize(){
   return jwtClient;
 
 } 
-
+//storege b destination mo3ayan w link
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
       cb(null, "./uploads");
@@ -128,39 +128,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Failed to upload file", error: error.message });
   }
 });
-
-
- 
-// app.post("/upload-files", upload.single("pdf"), async (req, res) => {
-//   try {
-//       if (!req.file) {
-//           return res.status(400).json({ message: "No file uploaded!" });
-//       }
-
-//       const authClient = await authorize();
-//       const fileUrl = await uploadFile(authClient, req.file.path, req.file.originalname);
-
-//       return res.status(200).json({ message: "File uploaded successfully!", fileUrl });
-//   } catch (error) {
-//       res.status(500).json({ message: "Error uploading file", error });
-//   }
-// });
-
-
-
-
-// ///////
-// const multer = require("multer");
-
-
-// //storege b destination mo3ayan w link
-
-// app.post("/upload-files", upload.single("file"), async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ message: "No file uploaded!" });
-//     }
-
 
 
 // const passport = require("passport");
