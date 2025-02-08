@@ -14,6 +14,7 @@ router.put("/update-user/:id",  authenticateToken, authControllers.updateUser);
 router.get("/get-user/:id",  authenticateToken, authControllers.getUser);
 router.post("/renew-subscription/:id", authControllers.renewSubscription);
 router.post("/verify-payment/:id", authControllers.verifySubscription);
+router.post("/forget-password", authControllers.forgetPassword);
 
 // Google OAuth Route redirects the user to the Google OAuth login page.
 router.get("/google",passport.authenticate("google", { scope: ["profile", "email"] }));
