@@ -55,7 +55,7 @@ const userSchema = new Schema(
     subscription: {
       subscriptionType: {
         type: String,
-        enum: ["free", "monthly", "annualy"],
+        enum: ["free", "premium"],
         default: "free",
         required: function () {
           return this.role === "user"; // Required only for users
@@ -67,11 +67,7 @@ const userSchema = new Schema(
       },
       endDate: {
         type: Date,
-        default: function () {
-          return new Date(
-            Date.now() + 365 * 60 * 24 * 60 * 60 * 1000
-          ); /* 60 years from now */
-        },
+        default: Date.now,
         required: function () {
           return (
             this.role === "user" &&
@@ -83,7 +79,8 @@ const userSchema = new Schema(
     },
     emailVerified: { type: Boolean, default: false },
     otp: { type: String }, //for email verification
-    otpExpiration: { type: Date }, // OTP expiration time
+    otpExpiration: { type: Date }, // OTP expiration time,
+    changePassword: {type: Boolean, deafult: false}
   },
   { timestamps: true } //add timestamp for each document,
 );
