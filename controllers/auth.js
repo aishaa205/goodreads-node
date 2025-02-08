@@ -310,7 +310,7 @@ exports.verifySubscription = async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: "Payment verified successfully" });
+    res.status(200).json({ message: "Payment verified successfully", endDate: newEndDate });
   } catch (error) {
     console.error("Error verifying payment:", error);
     res.status(500).json({ message: "Error verifying payment" });
