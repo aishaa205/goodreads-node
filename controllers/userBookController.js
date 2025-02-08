@@ -44,8 +44,10 @@ exports.getUserBooks = async (req, res) => {
 exports.getBooksForUser = async (req, res) => {
   try {
     const userBooks = await userBookModel
-      .find({ user: req.params.userId }) // Filter by user ID
-      .populate("book"); // Populate book details
+      .find({ user: req.params.userId }) 
+      .populate("user", "name")
+      .populate({ path: "book",
+        populate: { path: "author", select: "name" },}); // Populate book details
 
     if (!userBooks || userBooks.length === 0) {
       return res.status(404).json({ message: "No books found for this user" });
