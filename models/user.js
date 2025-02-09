@@ -80,7 +80,8 @@ const userSchema = new Schema(
     emailVerified: { type: Boolean, default: false },
     otp: { type: String }, //for email verification
     otpExpiration: { type: Date }, // OTP expiration time,
-    changePassword: {type: Boolean, deafult: false}
+    changePassword: {type: Boolean, deafult: false},
+    googleId: { type: String },
   },
   { timestamps: true } //add timestamp for each document,
 );
