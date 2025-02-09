@@ -8,6 +8,7 @@ const sendResponse = require('../utils/responseUtil');
 
 exports.createBook = async (req, res) => {
   try {
+    const { title, author, edition } = req.body;
     const existingBook = await Book.findOne({ title, author, edition });
 
     if (existingBook) {
@@ -21,6 +22,7 @@ exports.createBook = async (req, res) => {
 
     res.status(201).json({ success: true, book });
   } catch (error) {
+    console.log(error);
     res.status(400).send(error);
   }
 };
