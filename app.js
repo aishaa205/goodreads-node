@@ -38,7 +38,7 @@ async function authorize(){
 //storege b destination mo3ayan w link
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-      cb(null, "./uploads");
+      cb(null, "./uploads_files");
   }, 
   filename: function (req, file, cb) {
        const uniqueSuffix = Date.now() 
@@ -81,10 +81,17 @@ async function uploadFile(authClient, filePath, fileName) {
     // embedded link
     const fileUrl = `https://drive.google.com/file/d/${fileId}/preview`;
 
-    // Delete file from local storage after successful upload
-    //hal ha7tagha ?
-    fs.unlinkSync(filePath);
-
+    if (fs.existsSync(filePath)) {
+      fs.unlink(filePath, (err) => {
+          if (err) {
+              console.error('Error deleting file:', err);
+          } else {
+              console.log('File deleted successfully');
+          }
+      });
+  } else {
+      console.error('File does not exist:', filePath);
+  }
     return fileUrl;
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -98,8 +105,8 @@ async function uploadFile(authClient, filePath, fileName) {
 // (async () => {
 //   try {
 //     const authClient = await authorize();
-//     const filePath = "./pdftest.pdf"; // Local file path
-//     const fileName = "MyUploadedFile123.pdf"; // Desired name in Google Drive
+//     const filePath = "./pdf.pdf"; // Local file path
+//     const fileName = "File123.pdf"; // Desired name in Google Drive
 
 //     const fileUrl = await uploadFile(authClient, filePath, fileName);
 //     console.log("Embedded File Link:", fileUrl);
