@@ -2,6 +2,7 @@ const { default: axios } = require("axios");
 const Author = require('../models/author');
 const Book = require("../models/book");
 const Category = require("../models/category");
+const User = require("../models/user");
 const mongoose = require("mongoose");
 const { addImgurImage } = require("../utils/imgurImage");
 const sendResponse = require('../utils/responseUtil');
@@ -89,8 +90,16 @@ exports.getBook = async (req, res) => {
     }
     await Category.findByIdAndUpdate(book.category, { $inc: { views: 1 } });
     await Author.findByIdAndUpdate(book.author, { $inc: { views: 1 } });
-    //if (req.user.subscription.subscriptionType==='premium')
-    //book.pdfLink = undefined
+    if(req.user.role === "user"){
+      const currentUser = await User.findById(req.user.id);
+    if (
+      !currentUser ||
+      currentUser.subscription.subscriptionType !== "premium" ||
+      currentUser.subscription.endDate.getTime() < Date.now()
+    ) {
+      book.pdfLink = "not subscribed";
+    }
+    }
     res.send(book);
   } catch (error) {
     res.status(500).send(error);
