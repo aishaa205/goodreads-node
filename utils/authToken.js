@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const secretKey = process.env.JWT_SECRET;
-const expirationAfter = "10h";
+const expirationAfter = process.env.JWT_EXPIRES_IN;
 const generateToken = (user) => {
   const payload = {
     id: user._id,
@@ -12,8 +12,6 @@ const generateToken = (user) => {
     img: user.img,
     role: user.role,
   };
-
-
   return jwt.sign(payload, secretKey, { expiresIn: expirationAfter }); //return Token that contains userData.
 };
 
@@ -42,4 +40,3 @@ const verifyToken=(token)=>{
 }
 
 module.exports = { generateToken, refreshToken, verifyToken };
-

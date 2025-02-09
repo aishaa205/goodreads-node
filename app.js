@@ -12,10 +12,8 @@ const siteContentRoutes = require("./routes/siteContentRoutes");
 const routes = require("./routes");
 const app = express();
 const path = require("path");
-
-//const passport = require("passport");
-//require("./config/passport");
 const authRoutes = require("./routes/auth");
+const passport = require("./middleware/googleAuth");
 
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ limit: "5mb", extended: true }));
@@ -30,7 +28,16 @@ mongoose
   .catch((error) => console.error("Could not connect to MongoDB", error));
 // Middleware to serve static files from the "views/images" folder
 app.use(express.static(path.join(__dirname, "views")));
+
+// Middleware to allow cross-origin requests from the frontend origin
 app.use(cors());
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL, // Allow frontend origin
+//     credentials: true, // Allow cookies & headers
+//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed methods
+//   })
+// );
 app.use(express.json());
 
 app.use("/categories", categoryRoutes);
@@ -39,7 +46,8 @@ app.use("/authors", authorRoutes);
 app.use("/usercategories", userCategoryRoutes);
 app.use("/siteContent", siteContentRoutes);
 // app.use("/users", userRoutes);
-//app.use(passport.initialize());
+// Initialize Passport
+app.use(passport.initialize());
 app.use("/auth", authRoutes);
 app.use(routes);
 
