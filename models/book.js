@@ -24,15 +24,16 @@ const booksSchema = new Schema(
       type: String,
       default: "https://imgur.com/BYwiZv4",
     },
-    url: {
-      type: String,
-      validate: {
-        validator: function (value) {
-          return /^(http|https):\/\/[^ "]+$/.test(value);
-        },
-        message: "Invalid book URL format.",
-      },
-    },
+    pdfLink: String,
+    // url: {
+    //   type: String,
+    //   validate: {
+    //     validator: function (value) {
+    //       return /^(http|https):\/\/[^ "]+$/.test(value);
+    //     },
+    //     message: "Invalid book URL format.",
+    //   },
+    // },
     totalRate: {
       type: Number,
       default: 0,

@@ -1,0 +1,14 @@
+{
+    "type": "service_account",
+    "project_id": "goodreads-449910",
+    "private_key_id": "94161a881bd24c31ebc9731a17d69e8be6cc667a",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmieW0mbmbzu0r\nnyVa/E94a8H/AFiVg6IyrZ/tGBPi1bFan7zhn63oNOrcNuxpqArwerSR4EhuVv1c\n0KlUP2qoVwEUc2uhVCrrRYPp/250mNZm18fADytLEm7Fqx9e6sLJKeEDd2iW8EdI\nBuSpCS+szBjPTp26fh3Gih1KIb51b0tLXMQD14CWKF+4bEoCbiBHQwIzp2lNi5Rb\n0Ap9ONIMv74otcHJW5zFeMrWqchTequ/kShVLgNcaqiYZPrjC20vmlHDHkU/cGWu\nFcT7xnrORe3+h/lfwqsbAnOIS7A30z9hYc9RK+gP9PZlnwcg2XchQCmXklGZ6ix9\nBoCxdM0fAgMBAAECggEAQ7CJ5nGTEQK2wIOzjbs+293EoI518vNpYjrS5W3ja0/b\nAdAqV/RsnZSgnzhNuBYeuCbPrPkhx4NhALApGv6ZremLHVJafVy2AyGin+H79bVH\nc86huG0R9jX8QyiuHAjEejok5KFMqAjqmBqBJzl+ILhmHyC/mFT5akCp7f8wKA+X\nU8Ajxd+O8ErQNknANygkYQ168ww7eL8HbjHxK6ypbmPCDmVdiLKn6aIkYYZn4FJB\ndrYgJc1fZa9SmSb5x0TNFzvT953T8Ab8xdJfWyMfuV5UTnWvhap1DFJsLImGm6u+\nIJO5y2rdWHuoFssAnnz5L+bWBvneBHjV89TqknMDZQKBgQDigKh2/hdmVz6WEVOP\nKsJPtq7Frs1MmOd/Swu7CpR05RTtQYMfs71+Lx85rUBXGGf/P3q13kVj64rHJPuc\n0yyvFdtiKEYTNuYDzdXKVDO98JzuUJIsmdp8cJzJlXPPm+Qru95LUWuiav3KsEmR\nVrwK8j2EdYEo+uwncfHhTtL2/QKBgQC8OhwTL6//QsiqP9ivdHQfFyMdqMnsTDVU\nPPAfA7gZGjhnRcLb18+FcObooBvKUqQ2cfRenpXiTjUSANz6TXLcc0JJIw0sQQgo\nMg2eSuxaMKQ/3YhCa+yHa7otwdUh1qy9/CdmbRVhVXBB933gwmgKrm+V75RHndN0\nmbnQVTmFSwKBgQCMfLKBA77tykVWfS6vyRy2pp+mm3JZBSnpKVoATGKiUoh1VEIJ\nQsnQ31dlxdD3dHrktbHd5hxyCmGMfaLWtaCshEkLi+FS/6URTPVCxpFFSV1871qK\n8W6z6oFFAz7O0WlnuuH5I2o4VlZOBqPK0tpVi8SeSOewzFn3aVRWpDZz3QKBgE7r\nNlY9ClfGUog/WMTH2OAoPUr0OCVhFoMJQcxfLNMpkTiLoVW3uITEf6xNZRmBaOSD\nBuidKU7HZ6zyu7QewOf5U3OCxMUnRxpDUj5qP4rZFiTI55ah1Xw6CMeim5AiiC7o\nCEUDu5Eh131xHVAdcq330UVWPB+C5uPeiG/3K7TdAoGABnHItiYDWQaf+Uk4btI7\nljvUB9xCJi2yCw1bIgFClJkm0bVT3Lr5mAHdKqMgbEbsNLo4jSmsiITjlL4csVgV\nw0zx2bFtlv5cD5PhsR2Qb7+yDMdQfQUixdDYiK+OS+enO632VWpUEe4GbRvumKGh\nQBxN7eoIe/D/TLJc0LaHB2w=\n-----END PRIVATE KEY-----\n",
+    "client_email": "goodreads@goodreads-449910.iam.gserviceaccount.com",
+    "client_id": "114545806016705672894",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/goodreads%40goodreads-449910.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
+  
