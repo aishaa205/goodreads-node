@@ -10,10 +10,12 @@ const userBookRoutes = require("./routes/userBookRoutes");
 const userCategoryRoutes = require("./routes/userCategoryRoutes");
 const siteContentRoutes = require("./routes/siteContentRoutes");
 const routes = require("./routes");
+const googleDriveRoutes =  require("./routes/googleDriveRoutes");
 const app = express();
 const path = require("path");
 app.use(cors());
   
+
 //////////////////////////
 const fs = require("fs");
 const {google} = require("googleapis");
@@ -32,7 +34,6 @@ async function authorize(){
    );
   await jwtClient.authorize();
   return jwtClient;
-
 } 
 //storege b destination mo3ayan w link
 const storage = multer.diskStorage({
@@ -78,7 +79,9 @@ async function uploadFile(authClient, filePath, fileName) {
     });
 
     // embedded link
-    const fileUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+    //const fileUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+     const fileUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+
 
     if (fs.existsSync(filePath)) {
       fs.unlink(filePath, (err) => {
@@ -116,24 +119,8 @@ async function uploadFile(authClient, filePath, fileName) {
 
 
 
-app.post("/upload", upload.single("file"), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded!" });
-    }
+app.use("/upload", googleDriveRoutes);
 
-    const authClient = await authorize();
-    const fileUrl = await uploadFile(authClient, req.file.path, req.file.originalname);
-
-    // Delete the temporary file after upload
-    fs.unlinkSync(req.file.path);
-
-    res.status(200).json({ fileUrl });
-  } catch (error) {
-    console.error("Error uploading file:", error);
-    res.status(500).json({ message: "Failed to upload file", error: error.message });
-  }
-});
 
 
 // const passport = require("passport");

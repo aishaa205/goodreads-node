@@ -54,6 +54,7 @@ exports.getAllWithPagination = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     sendResponse(res, 500, null, "Failed to fetch books with pagination.");
   }
 }
@@ -65,6 +66,7 @@ exports.getBooks = async (req, res) => {
      .populate("author", "name");
    res.status(200).send(books);
  } catch (error) {
+   console.log(error);
    res.status(500).send(error);
  }
 };
@@ -80,12 +82,15 @@ exports.getBooksPopular = async (req, res) => {
 
 exports.getBook = async (req, res) => {
   try {
+    
     const book = await Book.findByIdAndUpdate(req.params.id, { $inc: { views: 1 }, new: true }).populate("category", "name").populate("author", "name about");
     if (!book) {
       return res.status(404).send();
     }
     await Category.findByIdAndUpdate(book.category, { $inc: { views: 1 } });
     await Author.findByIdAndUpdate(book.author, { $inc: { views: 1 } });
+    //if (req.user.subscription.subscriptionType==='premium')
+    //book.pdfLink = undefined
     res.send(book);
   } catch (error) {
     res.status(500).send(error);

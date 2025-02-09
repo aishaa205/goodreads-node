@@ -4,6 +4,7 @@ const authControllers = require("../controllers/auth");
 const User = require("../models/user");
 const { generateToken } = require("../utils/authToken");
 const { randomBytes } = require("crypto");
+const authenticateToken = require("../middleware/authenticate");
 const router = Router();
 //GET redirect url from .env
 const redirectURL = process.env.REDIRECT_URL;
@@ -12,6 +13,11 @@ router.post("/login", authControllers.loginUser);
 router.post("/verify", authControllers.verifyToken);
 router.post("/send-otp", authControllers.sendOTP);
 router.post("/verify-otp", authControllers.verifyOTP);
+router.put("/update-user/:id",  authenticateToken, authControllers.updateUser);
+router.get("/get-user/:id",  authenticateToken, authControllers.getUser);
+router.post("/renew-subscription/:id", authControllers.renewSubscription);
+router.post("/verify-payment/:id", authControllers.verifySubscription);
+router.post("/forget-password", authControllers.forgetPassword);
 
 // Google OAuth Route redirects the user to the Google OAuth login page.
 // Start Google OAuth flow
