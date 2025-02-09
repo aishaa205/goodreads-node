@@ -2,6 +2,7 @@ const { default: axios } = require("axios");
 const Author = require('../models/author');
 const Book = require("../models/book");
 const Category = require("../models/category");
+const User = require("../models/user");
 const mongoose = require("mongoose");
 const { addImgurImage } = require("../utils/imgurImage");
 const sendResponse = require('../utils/responseUtil');
@@ -55,6 +56,7 @@ exports.getAllWithPagination = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     sendResponse(res, 500, null, "Failed to fetch books with pagination.");
   }
 }
@@ -66,6 +68,7 @@ exports.getBooks = async (req, res) => {
      .populate("author", "name");
    res.status(200).send(books);
  } catch (error) {
+   console.log(error);
    res.status(500).send(error);
  }
 };
@@ -81,12 +84,23 @@ exports.getBooksPopular = async (req, res) => {
 
 exports.getBook = async (req, res) => {
   try {
+    
     const book = await Book.findByIdAndUpdate(req.params.id, { $inc: { views: 1 }, new: true }).populate("category", "name").populate("author", "name about");
     if (!book) {
       return res.status(404).send();
     }
     await Category.findByIdAndUpdate(book.category, { $inc: { views: 1 } });
     await Author.findByIdAndUpdate(book.author, { $inc: { views: 1 } });
+    if(req.user.role === "user"){
+      const currentUser = await User.findById(req.user.id);
+    if (
+      !currentUser ||
+      currentUser.subscription.subscriptionType !== "premium" ||
+      currentUser.subscription.endDate.getTime() < Date.now()
+    ) {
+      book.pdfLink = "not subscribed";
+    }
+    }
     res.send(book);
   } catch (error) {
     res.status(500).send(error);
