@@ -67,7 +67,7 @@ async function uploadFile(authClient, filePath, fileName) {
     });
 
     const fileId = response.data.id;
-    console.log("response",response);
+    //console.log("response",response);
     //kda el file accessible
     await drive.permissions.create({
       fileId: fileId,
