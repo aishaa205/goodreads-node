@@ -1,53 +1,50 @@
 const SiteContent = require('../models/siteContent');
-const sendResponse = require("../utils/responseUtil");
 
 //get content by type (about or terms)
 //example of calling the api http://localhost:3001/siteContent/about
-exports.getContent = async (req, res) => {
+exports.getContentByType = async (req, res) => {
   try {
     const { type } = req.params; // Get 'type' from route parameter
     if (!type) {
-      return sendResponse(res, 400, null, "Type parameter is required");
+       return res.status(400).send({ message: "Type is required" });
     }
-
     const content = await SiteContent.findOne({ type });
-
     if (!content) {
-      return sendResponse(res, 404, null, `${type} section not found`);
+      return res.status(404).json({ message: "Content not found" });
     }
-
-    sendResponse(res, 200, content);
+     res.status(200).send(content);
   } catch (error) {
-    sendResponse(res, 500, null, "Failed to fetch content");
+     res.status(500).send(error);
+  }
+};
+
+// Get all content
+// example of calling the api http://localhost:3001/siteContent/
+exports.getContent = async (req, res) => {
+  try {
+    const content = await SiteContent.find();
+    if (!content) return res.status(404).json({ message: "Content not found" });
+    res.json(content);
+  } catch (error) {
+    res.status(500).json({ message: "error", error });
   }
 };
 
 // Update About or Terms
 // body: { content: "New content" }
 // example of calling the api http://localhost:3001/siteContent/about
+// example of calling the api http://localhost:3001/siteContent/terms
+//  Update or create content
 exports.updateContent = async (req, res) => {
   try {
-    const { type } = req.params;
-    console.log(type);
-    // Find content by type
-    const content = await SiteContent.findOne({ type });
-
-    if (!content) {
-      // If no content found, create a new entry
-      const newContent = new SiteContent({ type, content: req.body.content });
-      const createdContent = await newContent.save();
-      return sendResponse(res, 201, createdContent, `${type} section created successfully`);
-    }
-
-    // Update the existing content
+    const { content } = req.body;
     const updatedContent = await SiteContent.findOneAndUpdate(
-      { type: type },
-      { content: req.body.content },
-      { new: true, upsert: true } // Creates document if it doesn't exist
+      { type: req.params.type },
+      { content },
+      { new: true, upsert: true } // upsert: true creates the document if it doesn't exist
     );
-
-    sendResponse(res, 200, updatedContent, `${type} section updated successfully`);
+    res.json(updatedContent);
   } catch (error) {
-    sendResponse(res, 500, null, "Failed to update content"+ error.message);
+    res.status(500).json({ message: "Error updating content", error });
   }
 };

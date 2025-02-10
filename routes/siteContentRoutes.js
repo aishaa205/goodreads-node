@@ -4,6 +4,13 @@ const authenticateToken = require("../middleware/authenticate");
 const router = express.Router();
 
 const siteContentController = require("../controllers/siteContentController");
-router.get("/:type", siteContentController.getContent);
+
+// get all content
+router.get("/", siteContentController.getContent);
+
+//get content by type (about or terms)
+router.get("/:type", siteContentController.getContentByType);
+
+//update content by type (about or terms)
 router.put("/:type",authenticateToken,authorizeToken,siteContentController.updateContent);
 module.exports = router;
