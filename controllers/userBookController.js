@@ -1,3 +1,4 @@
+const book = require("../models/book");
 const userBookModel = require("../models/userBook");
 const { param } = require("../routes");
 
@@ -12,6 +13,7 @@ exports.createUserBook = async (req, res) => {
       return res.status(400).json({ message: "UserBook already exists" });
     }
     await newUserBook.save();
+    await book.findByIdAndUpdate(req.body.book, { $inc: { totalRateCount: 1 } });
     res.status(201).send(newUserBook);
   } catch (error) {
     res.status(400).send("error");
@@ -85,6 +87,7 @@ exports.deleteUserBook = async (req, res) => {
     if (!userBook) {
       return res.status(404).send();
     }
+    await book.findByIdAndUpdate(userBook.book, { $inc: { totalRateCount: -1, totalRate: -userBook.rating || 0 } });
     res.send(userBook);
   } catch (error) {
     res.status(500).send(error);
@@ -100,18 +103,22 @@ exports.handleRating = async (req, res) => {
     const { bookId } = req.params;
     // Check if user has already rated this book
     let userBook = await userBookModel.findOne({ book: bookId, user: userId });
-
+    console.log(userBook.rating, rating);
     if (!userBook) {
       userBook = new userBookModel({ book: bookId, user: userId, rating });
       await userBook.save();
+      await book.findByIdAndUpdate(bookId, { $inc: { totalRate: rating, totalRateCount: 1 }, });
       return res.status(201).send(userBook);
     }
 
+    userBook.rating = userBook.rating || 0;
     // Update existing rating
+    await book.findByIdAndUpdate(bookId, { $inc: { totalRate: rating - userBook.rating } });
     userBook.rating = rating;
     await userBook.save();
     res.status(200).send(userBook);
   } catch (error) {
+    console.log(error);
     res.status(500).send({ error: error.message });
   }
 };
